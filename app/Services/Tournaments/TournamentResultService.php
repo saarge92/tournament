@@ -6,6 +6,7 @@ namespace App\Services\Tournaments;
 
 use App\Interfaces\Tournaments\ITournamentResultService;
 use App\Models\TournamentResult;
+use App\Repositories\Interfaces\ITournamentRepository;
 use App\Repositories\Interfaces\ITournamentResultRepository;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -18,10 +19,12 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 class TournamentResultService implements ITournamentResultService
 {
     public ITournamentResultRepository $tournamentResultRepository;
+    public ITournamentRepository $tournamentRepository;
 
-    public function __construct(ITournamentResultRepository $tournamentResultRepository)
+    public function __construct(ITournamentResultRepository $tournamentResultRepository, ITournamentRepository $tournamentRepository)
     {
         $this->tournamentResultRepository = $tournamentResultRepository;
+        $this->tournamentRepository = $tournamentRepository;
     }
 
     /**
@@ -33,8 +36,11 @@ class TournamentResultService implements ITournamentResultService
      */
     public function createTeamResult(int $idTeam, int $idTournament, int $points): TournamentResult
     {
-        $existedTeamTournamentResult = $this->tournamentResultRepository->findTournament($idTeam, $idTournament);
+        $tournament = $this->tournamentRepository->getTournamentById($idTournament);
+        if (!$tournament)
+            throw new ConflictHttpException("Такой турнир отсутсвует в базе");
 
+        $existedTeamTournamentResult = $this->tournamentResultRepository->findTournament($idTeam, $idTournament);
         if ($existedTeamTournamentResult)
             throw new ConflictHttpException("Данные турнира для этой команды уже существуют! Попробуйте обновить запись");
 
@@ -60,6 +66,10 @@ class TournamentResultService implements ITournamentResultService
         if ($newPoint < 0)
             throw new ConflictHttpException("Присваиваемые очки не могут быть отрицательными");
 
+        $tournament = $this->tournamentRepository->getTournamentById($idTournament);
+        if (!$tournament)
+            throw new ConflictHttpException("Такой турнир отсутсвует в базе");
+
         $existedRecordTeamResult = $this->tournamentResultRepository->findTournament($idTeam, $idTournament);
         if (!$existedRecordTeamResult)
             return $this->tournamentResultRepository->createTournamentResult([
@@ -67,6 +77,7 @@ class TournamentResultService implements ITournamentResultService
                 'id_tournament' => $idTournament,
                 'points' => $newPoint
             ]);
+
         $existedRecordTeamResult->points = $existedRecordTeamResult->points + $newPoint;
         $existedRecordTeamResult->update();
         return $existedRecordTeamResult;

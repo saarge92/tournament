@@ -14,16 +14,17 @@ class CreateResultFinalsTable extends Migration
     public function up()
     {
         Schema::create('result_finals', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('id_team')->unsigned()->nullable();
-            $table->bigInteger('id_tournament')->unsigned()->nullable();
+            $table->bigInteger('id_team')->unsigned();
+            $table->bigInteger('id_tournament')->unsigned();
             $table->integer('place')->unsigned();
 
             $table->foreign('id_team')->on('teams')
-                ->references('id')->onDelete('SET NULL')->onUpdate('CASCADE');
+                ->references('id')->onDelete('CASCADE')->onUpdate('CASCADE');
 
             $table->foreign('id_tournament')->on('tournaments')
-                ->references('id')->onDelete('SET NULL')->onUpdate('CASCADE');
+                ->references('id')->onDelete('CASCADE')->onUpdate('CASCADE');
+
+            $table->primary(['id_team', 'id_tournament']);
 
             $table->timestamps();
             $table->softDeletes();
