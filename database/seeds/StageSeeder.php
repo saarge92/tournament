@@ -1,6 +1,5 @@
 <?php
 
-namespace Database\Seeders;
 
 use App\Models\Stage;
 use Illuminate\Database\Seeder;
