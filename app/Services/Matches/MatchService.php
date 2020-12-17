@@ -65,4 +65,17 @@ class MatchService implements IMatchService
 
         return $this->matchRepository->createMatch($data);
     }
+
+    /**
+     * Получаем данные матча между командами на определенном этапе квалификации
+     * @param int $idHomeTeam Id команды хозяев
+     * @param int $idTeamGuest Id Команды гостей
+     * @param int $tournamentId Id турнира
+     * @param int $idStage Id этапа турнира
+     * @return mixed
+     */
+    public function getMatchInfoOnTournamentStage(int $idHomeTeam, int $idTeamGuest, int $tournamentId, int $idStage)
+    {
+        return $this->matchRepository->getMatchByTeamTournamentStage($idHomeTeam, $idTeamGuest, $tournamentId, $idStage);
+    }
 }

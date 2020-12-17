@@ -36,7 +36,9 @@ class TournamentResultService implements ITournamentResultService
      */
     public function createTeamResult(int $idTeam, int $idTournament, int $points): TournamentResult
     {
+        // Получение турниров которые не проводились! Если таких турниров нет, то создадим рэндомный
         $tournament = $this->tournamentRepository->getTournamentById($idTournament);
+
         if (!$tournament)
             throw new ConflictHttpException("Такой турнир отсутсвует в базе");
 

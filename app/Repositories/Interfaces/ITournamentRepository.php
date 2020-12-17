@@ -14,4 +14,8 @@ use App\Models\Tournament;
 interface ITournamentRepository
 {
     function getTournamentById(int $id): ?Tournament;
+
+    function createTournament(array $data): Tournament;
+
+    function getUnsettledTournaments();
 }

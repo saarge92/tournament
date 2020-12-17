@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Tournament extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = ['name'];
 }

@@ -17,6 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/hello',[
-    'uses' => 'HomeController@hello'
+Route::post('/qualification/generate',[
+    'uses' => 'QualificationController@generateQualificationGames'
 ]);
