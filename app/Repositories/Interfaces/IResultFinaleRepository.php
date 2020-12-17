@@ -3,6 +3,8 @@
 
 namespace App\Repositories\Interfaces;
 
+use App\Models\ResultFinal;
+
 /**
  * Интерфейс для репозитория по работе с сущностями result_finals
  *
@@ -11,5 +13,7 @@ namespace App\Repositories\Interfaces;
  */
 interface IResultFinaleRepository
 {
-    function createFinalResult(array $data);
+    function createFinalResult(array $data): ResultFinal;
+
+    function getFinalResultByTeamAndTournament(int $idTeam, int $idTournament): ?ResultFinal;
 }

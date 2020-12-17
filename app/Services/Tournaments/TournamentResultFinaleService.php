@@ -40,6 +40,10 @@ class TournamentResultFinaleService implements IResultGameFinaleService
      */
     function createResultFinale(int $idTeam, int $idTournament, int $place): ResultFinal
     {
+        $existRecordAboutFinale = $this->resultFinaleRepository->getFinalResultByTeamAndTournament($idTeam, $idTournament);
+        if (!$existRecordAboutFinale)
+            throw new ConflictHttpException("Такая запись результата уже существует");
+
         $team = $this->teamRepository->getTeam($idTeam);
         if (!$team)
             throw new ConflictHttpException("Такой команды не существует");
