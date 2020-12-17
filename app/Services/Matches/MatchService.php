@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
  * по работе с матчами команд
  *
  * @package App\Services\Matches
+ * @author Serdar Durdyev
  */
 class MatchService implements IMatchService
 {
@@ -63,10 +64,5 @@ class MatchService implements IMatchService
             throw new ConflictHttpException("Турнир с таким id_tournament не найден");
 
         return $this->matchRepository->createMatch($data);
-    }
-
-    function sayHello(): array
-    {
-        return ['message' => 'Hello'];
     }
 }

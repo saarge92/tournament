@@ -8,7 +8,8 @@ use App\Models\Match;
 
 /**
  * Интерфейс, определяющий функционал репозитория
- * для сущности матчей комманд
+ * для сущности матчей комманд (сущность Match)
+ *
  * @package App\Repositories\Interfaces
  */
 interface IMatchRepository

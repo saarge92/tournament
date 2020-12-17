@@ -15,6 +15,4 @@ use App\Models\Match;
 interface IMatchService
 {
     function addMatchInfo(array $data): Match;
-
-    function sayHello(): array;
 }
