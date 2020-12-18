@@ -4,6 +4,7 @@
 namespace App\Services\Tournaments;
 
 
+use App\Interfaces\Tournaments\ind;
 use App\Interfaces\Tournaments\ITournamentResultService;
 use App\Models\TournamentResult;
 use App\Repositories\Interfaces\ITournamentRepository;
@@ -83,5 +84,16 @@ class TournamentResultService implements ITournamentResultService
         $existedRecordTeamResult->points = $existedRecordTeamResult->points + $newPoint;
         $existedRecordTeamResult->update();
         return $existedRecordTeamResult;
+    }
+
+    /**
+     * Получение данных результатов команды на турнире в рамках квалификационных игр
+     * @param int $idTeam Id команды
+     * @param int $idTournament Id турнира
+     * @return TournamentResult|null Вернем найденную запись
+     */
+    public function getTeamResultByTeamAndTournament(int $idTeam, int $idTournament): ?TournamentResult
+    {
+        return $this->tournamentResultRepository->findTournament($idTeam, $idTournament);
     }
 }

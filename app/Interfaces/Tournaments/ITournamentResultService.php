@@ -17,4 +17,6 @@ interface ITournamentResultService
     function createTeamResult(int $idTeam, int $idTournament, int $points): TournamentResult;
 
     function updateTeamResult(int $idTeam, int $idTournament, int $newPoint): TournamentResult;
+
+    function getTeamResultByTeamAndTournament(int $idTeam, int $idTournament): ?TournamentResult;
 }

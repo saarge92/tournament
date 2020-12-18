@@ -12,6 +12,7 @@ use App\Repositories\Implementations\TeamRepository;
 use App\Repositories\Implementations\TournamentRepository;
 use App\Repositories\Implementations\TournamentResultRepository;
 use App\Repositories\Interfaces\IMatchRepository;
+use App\Repositories\Interfaces\IResultFinaleRepository;
 use App\Repositories\Interfaces\ITeamRepository;
 use App\Repositories\Interfaces\ITournamentRepository;
 use App\Repositories\Interfaces\ITournamentResultRepository;
@@ -36,7 +37,7 @@ class IocProvider extends ServiceProvider
         $this->app->singleton(ITournamentResultService::class, TournamentResultService::class);
         $this->app->singleton(ITournamentRepository::class, TournamentRepository::class);
         $this->app->singleton(ITeamRepository::class, TeamRepository::class);
-        $this->app->singleton(ITournamentResultRepository::class, ResultFinaleRepository::class);
+        $this->app->singleton(IResultFinaleRepository::class, ResultFinaleRepository::class);
         $this->app->singleton(IResultGameFinaleService::class, TournamentResultFinaleService::class);
         $this->app->singleton(IQualificationGeneratorService::class, QualificationGeneratorService::class);
     }

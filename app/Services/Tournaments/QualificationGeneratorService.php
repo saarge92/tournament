@@ -11,6 +11,7 @@ use App\Repositories\Implementations\TournamentRepository;
 use App\Repositories\Interfaces\ITournamentRepository;
 use Faker\Factory;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 
 /**
@@ -48,17 +49,24 @@ class QualificationGeneratorService implements IQualificationGeneratorService
             if (!$tournament)
                 $tournament = $this->tournamentRepository->createTournament(['name' => 'Чемпионат ' . $this->faker->company]);
             $divisions = Division::all();
+
             $response = [];
+            $response[]['tournamentId'] = $tournament->id;
+            $response[]['tournament_name'] = $tournament->name;
 
             foreach ($divisions as $division) {
-                $row['division'] = $division->id;
-                $teams = $division->teams();
+                $row['division_id'] = $division->id;
+                $row['division_name'] = $division->name;
+                $teams = $division->teams;
                 foreach ($teams as $teamHome) {
+                    $teamRow[$teamHome->name] = [];
                     foreach ($teams as $teamGuest) {
                         if ($teamHome->id != $teamGuest->id) {
                             $matchHappened = $this->matchService->getMatchInfoOnTournamentStage($teamHome->id,
                                 $teamGuest->id, $tournament->id, 1);
-                            if (!$matchHappened) {
+                            $matchHappenedGuestSide = $this->matchService->getMatchInfoOnTournamentStage($teamGuest->id,
+                                $teamHome->id, $tournament->id, 1);
+                            if (!$matchHappened && !$matchHappenedGuestSide) {
                                 $match = $this->matchService->addMatchInfo([
                                     'id_division' => $division->id,
                                     'id_team_home' => $teamHome->id,
@@ -68,6 +76,7 @@ class QualificationGeneratorService implements IQualificationGeneratorService
                                     'count_goal_team_home' => rand(1, 10),
                                     'count_goal_team_guest' => rand(1, 10)
                                 ]);
+
                                 if ($match->count_goal_team_home == $match->count_goal_team_guest) {
                                     $this->tournamentResultService->updateTeamResult($teamGuest->id, $tournament->id, 1);
                                     $this->tournamentResultService->updateTeamResult($teamHome->id, $tournament->id, 1);
@@ -76,18 +85,32 @@ class QualificationGeneratorService implements IQualificationGeneratorService
                                 } else if ($match->count_goal_team_home < $match->count_goal_team_guest) {
                                     $this->tournamentResultService->updateTeamResult($teamGuest->id, $tournament->id, 3);
                                 }
-                            }
-                            else{
-
+                                $teamRow[$teamHome->name][] = [$teamGuest->id => $match->count_goal_team_home . ":" .
+                                    $match->count_goal_team_guest];
+                            } else {
+                                if ($matchHappened)
+                                    $teamRow[$teamHome->name][] = [$teamGuest->name => $matchHappened->count_goal_team_home
+                                        . ":" . $matchHappened->count_goal_team_guest];
+                                else if ($matchHappenedGuestSide)
+                                    $teamRow[$teamHome->name][] = [$teamGuest->name => $matchHappened->count_goal_team_guest
+                                        . ":" . $matchHappened->count_goal_team_home];
                             }
                         }
                     }
+                    $teamResult = $this->tournamentResultService->getTeamResultByTeamAndTournament(
+                        $teamHome->id, $tournament->id
+                    );
+                    if ($teamResult)
+                        $teamRow[$teamHome->name]['score'] = $teamResult->points;
+                    else
+                        $teamRow[$teamHome->name]['score'] = null;
+                    $row['tables'][] = $teamRow;
                 }
-                array_push($response, $row);
+                $response[]['tables'][] = $row;
             }
         } catch (\Exception $ex) {
             DB::rollBack();
-            throw;
+            throw new ConflictHttpException($ex);
         }
         DB::commit();
         return $response;
