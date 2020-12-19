@@ -17,4 +17,6 @@ interface IMatchService
     function addMatchInfo(array $data): Match;
 
     function getMatchInfoOnTournamentStage(int $idHomeTeam, int $idTeamGuest, int $tournamentId, int $idStage);
+
+    function getMatchesForTeam(int $teamId, int $tournament, int $idStage);
 }

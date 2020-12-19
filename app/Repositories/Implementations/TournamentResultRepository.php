@@ -35,4 +35,25 @@ class TournamentResultRepository implements ITournamentResultRepository
     {
         return TournamentResult::where(['id_team' => $idTeam, 'id_tournament' => $idTournament])->first();
     }
+
+    /**
+     * Получаем результаты турниров по id турнира
+     * @param int $id Id турнира
+     * @return TournamentResult|null Вернем турнир или пустую запись
+     */
+    public function getTournamentResultById(int $id): ?TournamentResult
+    {
+        return TournamentResult::find($id);
+    }
+
+    /**
+     * Получение данных результатов турнира по id турнира
+     * @param int $tournamentId Id турнира
+     * @return mixed
+     */
+    function getTournamentResultByTournamentId(int $tournamentId)
+    {
+        return TournamentResult::where(['id_tournament' => $tournamentId])
+            ->orderBy('points', 'DESC')->get();
+    }
 }

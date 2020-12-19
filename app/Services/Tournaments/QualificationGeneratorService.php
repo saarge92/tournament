@@ -55,7 +55,7 @@ class QualificationGeneratorService implements IQualificationGeneratorService
             $divisions = Division::all();
 
             $response = [];
-            $response['tournamentId'] = $tournament->id;
+            $response['tournament_id'] = $tournament->id;
             $response['tournament_name'] = $tournament->name;
 
             // Перебираем дивизионы и для каждой команды дивизиона проводим по 1 матчу

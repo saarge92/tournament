@@ -19,4 +19,6 @@ interface IMatchRepository
     function getMatch(int $id): ?Match;
 
     function getMatchByTeamTournamentStage(int $teamHome, int $teamGuest, int $idTournament, int $idStage);
+
+    function getMatchesByTeamIdAndTournament(int $idTeam, int $tournamentId, int $stageId);
 }

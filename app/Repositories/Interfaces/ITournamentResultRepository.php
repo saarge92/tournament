@@ -17,4 +17,8 @@ interface ITournamentResultRepository
     function createTournamentResult(array $data): TournamentResult;
 
     function findTournament(int $idTeam, int $idTournament): ?TournamentResult;
+
+    function getTournamentResultById(int $id): ?TournamentResult;
+
+    function getTournamentResultByTournamentId(int $tournamentId);
 }
