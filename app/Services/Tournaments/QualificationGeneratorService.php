@@ -45,9 +45,10 @@ class QualificationGeneratorService implements IQualificationGeneratorService
      */
     public function generateQualificationGames(): array
     {
-        // Берем турниры, которые не проводились ранее
         DB::beginTransaction();
         try {
+
+            // Берем турниры, которые не проводились ранее. Если таких нет, создадим новый турнир случайно
             $tournament = $this->tournamentRepository->getUnsettledTournaments()->first();
             if (!$tournament)
                 $tournament = $this->tournamentRepository->createTournament(['name' => 'Чемпионат ' . $this->faker->company]);
@@ -57,6 +58,8 @@ class QualificationGeneratorService implements IQualificationGeneratorService
             $response['tournamentId'] = $tournament->id;
             $response['tournament_name'] = $tournament->name;
 
+            // Перебираем дивизионы и для каждой команды дивизиона проводим по 1 матчу
+            // и записываем результаты матчей
             foreach ($divisions as $division) {
                 $tableRow['division_id'] = $division->id;
                 $tableRow['division_name'] = $division->name;
