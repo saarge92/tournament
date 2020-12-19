@@ -10,6 +10,13 @@ class Match extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'id_division'
+        'id_division',
+        'id_team_home',
+        'id_team_guest',
+        'id_tournament',
+        'id_stage',
+        'count_goal_team_home',
+        'count_goal_team_guest',
+
     ];
 }

@@ -51,12 +51,12 @@ class QualificationGeneratorService implements IQualificationGeneratorService
             $divisions = Division::all();
 
             $response = [];
-            $response[]['tournamentId'] = $tournament->id;
-            $response[]['tournament_name'] = $tournament->name;
+            $response['tournamentId'] = $tournament->id;
+            $response['tournament_name'] = $tournament->name;
 
             foreach ($divisions as $division) {
-                $row['division_id'] = $division->id;
-                $row['division_name'] = $division->name;
+                $tableRow['division_id'] = $division->id;
+                $tableRow['division_name'] = $division->name;
                 $teams = $division->teams;
                 foreach ($teams as $teamHome) {
                     $teamRow[$teamHome->name] = [];
@@ -85,15 +85,15 @@ class QualificationGeneratorService implements IQualificationGeneratorService
                                 } else if ($match->count_goal_team_home < $match->count_goal_team_guest) {
                                     $this->tournamentResultService->updateTeamResult($teamGuest->id, $tournament->id, 3);
                                 }
-                                $teamRow[$teamHome->name][] = [$teamGuest->id => $match->count_goal_team_home . ":" .
-                                    $match->count_goal_team_guest];
+                                $teamRow[$teamHome->name][$teamGuest->name] = $match->count_goal_team_home . ":" .
+                                    $match->count_goal_team_guest;
                             } else {
                                 if ($matchHappened)
-                                    $teamRow[$teamHome->name][] = [$teamGuest->name => $matchHappened->count_goal_team_home
-                                        . ":" . $matchHappened->count_goal_team_guest];
+                                    $teamRow[$teamHome->name][$teamGuest->name] = $matchHappened->count_goal_team_home
+                                        . ":" . $matchHappened->count_goal_team_guest;
                                 else if ($matchHappenedGuestSide)
-                                    $teamRow[$teamHome->name][] = [$teamGuest->name => $matchHappened->count_goal_team_guest
-                                        . ":" . $matchHappened->count_goal_team_home];
+                                    $teamRow[$teamHome->name][$teamGuest->name] = $matchHappenedGuestSide->count_goal_team_guest
+                                        . ":" . $matchHappenedGuestSide->count_goal_team_home;
                             }
                         }
                     }
@@ -103,10 +103,12 @@ class QualificationGeneratorService implements IQualificationGeneratorService
                     if ($teamResult)
                         $teamRow[$teamHome->name]['score'] = $teamResult->points;
                     else
-                        $teamRow[$teamHome->name]['score'] = null;
-                    $row['tables'][] = $teamRow;
+                        $teamRow[$teamHome->name]['score'] = 0;
+                    $tableRow['results'][] = $teamRow;
+                    $teamRow = [];
                 }
-                $response[]['tables'][] = $row;
+                $response['tables'][] = $tableRow;
+                $tableRow = [];
             }
         } catch (\Exception $ex) {
             DB::rollBack();

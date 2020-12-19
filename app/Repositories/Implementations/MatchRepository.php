@@ -30,7 +30,7 @@ class MatchRepository implements IMatchRepository
             'id_team_home' => $teamHome,
             'id_team_guest' => $teamGuest,
             'id_tournament' => $idTournament,
-            'id_stage' => $idStage
+            'id_stage' => $idStage,
         ])->first();
     }
 }
