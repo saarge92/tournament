@@ -7,6 +7,9 @@ use App\Interfaces\Matches\IMatchService;
 use App\Interfaces\Tournaments\IQualificationGeneratorService;
 use App\Interfaces\Tournaments\ITournamentResultService;
 use App\Models\Division;
+use App\Models\Match;
+use App\Models\Team;
+use App\Models\Tournament;
 use App\Repositories\Implementations\TournamentRepository;
 use App\Repositories\Interfaces\ITournamentRepository;
 use Faker\Factory;
@@ -77,14 +80,8 @@ class QualificationGeneratorService implements IQualificationGeneratorService
                                     'count_goal_team_guest' => rand(1, 10)
                                 ]);
 
-                                if ($match->count_goal_team_home == $match->count_goal_team_guest) {
-                                    $this->tournamentResultService->updateTeamResult($teamGuest->id, $tournament->id, 1);
-                                    $this->tournamentResultService->updateTeamResult($teamHome->id, $tournament->id, 1);
-                                } else if ($match->count_goal_team_home > $match->count_goal_team_guest) {
-                                    $this->tournamentResultService->updateTeamResult($teamHome->id, $tournament->id, 3);
-                                } else if ($match->count_goal_team_home < $match->count_goal_team_guest) {
-                                    $this->tournamentResultService->updateTeamResult($teamGuest->id, $tournament->id, 3);
-                                }
+                                $this->updateTeamResult($match, $teamGuest, $teamHome, $tournament);
+
                                 $teamRow[$teamHome->name][$teamGuest->name] = $match->count_goal_team_home . ":" .
                                     $match->count_goal_team_guest;
                             } else {
@@ -101,9 +98,11 @@ class QualificationGeneratorService implements IQualificationGeneratorService
                         $teamHome->id, $tournament->id
                     );
                     if ($teamResult)
-                        $teamRow[$teamHome->name]['score'] = $teamResult->points;
-                    else
-                        $teamRow[$teamHome->name]['score'] = 0;
+                        $teamRow['score'] = $teamResult->points;
+                    else {
+                        $teamRow['score'] = 0;
+                        $this->tournamentResultService->createTeamResult($teamHome->id, $tournament->id, 0);
+                    }
                     $tableRow['results'][] = $teamRow;
                     $teamRow = [];
                 }
@@ -116,5 +115,24 @@ class QualificationGeneratorService implements IQualificationGeneratorService
         }
         DB::commit();
         return $response;
+    }
+
+    /**
+     * Инициируем данные результатов матчей на турнире во время генерации турнирной таблицы
+     * @param Match $match Матч, который проходил
+     * @param Team $teamGuest Команда гостей
+     * @param Team $teamHome Команда хозяев
+     * @param Tournament $tournament Турнир
+     */
+    private function updateTeamResult(Match $match, Team $teamGuest, Team $teamHome, Tournament $tournament)
+    {
+        if ($match->count_goal_team_home == $match->count_goal_team_guest) {
+            $this->tournamentResultService->updateTeamResult($teamGuest->id, $tournament->id, 1);
+            $this->tournamentResultService->updateTeamResult($teamHome->id, $tournament->id, 1);
+        } else if ($match->count_goal_team_home > $match->count_goal_team_guest) {
+            $this->tournamentResultService->updateTeamResult($teamHome->id, $tournament->id, 3);
+        } else if ($match->count_goal_team_home < $match->count_goal_team_guest) {
+            $this->tournamentResultService->updateTeamResult($teamGuest->id, $tournament->id, 3);
+        }
     }
 }
