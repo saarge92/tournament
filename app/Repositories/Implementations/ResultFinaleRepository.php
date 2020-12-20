@@ -33,4 +33,14 @@ class ResultFinaleRepository implements IResultFinaleRepository
     {
         return ResultFinal::where(['id_team' => $idTeam, 'id_tournament' => $idTournament])->first();
     }
+
+    /**
+     * Получение результатов турнира по id турнира
+     * @param int $idTournament Id турнира
+     * @return mixed
+     */
+    public function getFinaleResultByTournamentId(int $idTournament)
+    {
+        return ResultFinal::where(['id_tournament' => $idTournament])->get();
+    }
 }

@@ -16,4 +16,6 @@ interface IResultFinaleRepository
     function createFinalResult(array $data): ResultFinal;
 
     function getFinalResultByTeamAndTournament(int $idTeam, int $idTournament): ?ResultFinal;
+
+    function getFinaleResultByTournamentId(int $idTournament);
 }

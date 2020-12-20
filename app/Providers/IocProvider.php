@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Interfaces\Matches\IMatchService;
+use App\Interfaces\Playoffs\IPlayoffGeneratorService;
 use App\Interfaces\Tournaments\IQualificationGeneratorService;
 use App\Interfaces\Tournaments\IQualificationTournamentService;
 use App\Interfaces\Tournaments\IResultGameFinaleService;
@@ -18,6 +19,7 @@ use App\Repositories\Interfaces\ITeamRepository;
 use App\Repositories\Interfaces\ITournamentRepository;
 use App\Repositories\Interfaces\ITournamentResultRepository;
 use App\Services\Matches\MatchService;
+use App\Services\Playoffs\PlayoffGeneratorService;
 use App\Services\Tournaments\QualificationGeneratorService;
 use App\Services\Tournaments\QualificationTournamentService;
 use App\Services\Tournaments\TournamentResultFinaleService;
@@ -47,6 +49,7 @@ class IocProvider extends ServiceProvider
         $this->app->singleton(IResultGameFinaleService::class, TournamentResultFinaleService::class);
         $this->app->singleton(IQualificationGeneratorService::class, QualificationGeneratorService::class);
         $this->app->singleton(IQualificationTournamentService::class, QualificationTournamentService::class);
+        $this->app->singleton(IPlayoffGeneratorService::class, PlayoffGeneratorService::class);
     }
 
     /**
