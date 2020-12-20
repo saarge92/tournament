@@ -24,3 +24,7 @@ Route::post('/qualification/generate', [
 Route::get('/qualification/tournament/{id}', [
     'uses' => 'QualificationController@getQualificationByTournamentId'
 ]);
+
+Route::post('/playoff/{id}/generate',[
+    'uses' => 'PlayOffGeneratorController@generatePlayOff'
+]);

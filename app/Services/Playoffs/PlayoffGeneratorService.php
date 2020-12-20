@@ -5,8 +5,12 @@ namespace App\Services\Playoffs;
 
 
 use App\Interfaces\Playoffs\IPlayoffGeneratorService;
+use App\Repositories\Interfaces\IMatchRepository;
 use App\Repositories\Interfaces\IResultFinaleRepository;
 use App\Repositories\Interfaces\ITournamentResultRepository;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 /**
  * Генератор плей-оф матчей для турниров
@@ -18,36 +22,97 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
 {
     public ITournamentResultRepository $tournamentResultRepository;
     public IResultFinaleRepository $finaleRepository;
+    public IMatchRepository $matchRepository;
 
-    public function __construct(ITournamentResultRepository $tournamentResultRepository, IResultFinaleRepository $resultFinaleRepository)
+    public function __construct(ITournamentResultRepository $tournamentResultRepository, IResultFinaleRepository $resultFinaleRepository,
+                                IMatchRepository $matchRepository)
     {
         $this->tournamentResultRepository = $tournamentResultRepository;
         $this->finaleRepository = $resultFinaleRepository;
+        $this->matchRepository = $matchRepository;
     }
 
     /**
-     * Генерирование плей-оф матчей
-     * @param int $idTournament
-     * @return array
+     * Генерирование плей-оф матчей для турнира
+     * @param int $idTournament Id турнира
+     * @return array Вернем массив данных с генерированными плей-офф
      */
     public function generatePlayOfForTournament(int $idTournament)
     {
-        $tournamentResults = $this->tournamentResultRepository->getTournamentResultByTournamentId($idTournament);
+        $tournamentResults = $this->tournamentResultRepository->getTournamentResultByTournamentIdGroupedByDivision($idTournament);
         if (!$tournamentResults)
             return [];
 
         $resultFinale = $this->finaleRepository->getFinaleResultByTournamentId($idTournament);
-        if ($resultFinale)
+        if (count($resultFinale) > 0)
             return $resultFinale;
 
+        $groupedByDivisionTopTeamResult = $this->generateTopTeamResultByDivision($tournamentResults);
+        DB::beginTransaction();
+        try {
+            $quarterFinalResult = $this->generateQuarterFinale($groupedByDivisionTopTeamResult);
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw new ConflictHttpException($exception);
+        }
+        return $quarterFinalResult;
     }
 
-    private function startGeneratePlayOffData(int $idTournament)
+    /**
+     * Генерация четверь-финала
+     * @param array $tournamentResults Результаты турнира по дивизионам
+     * @return mixed
+     */
+    private function generateQuarterFinale(array $tournamentResults)
     {
-        $tournamentResults = $this->tournamentResultRepository->getTournamentResultByTournamentIdGroupedByDivision($idTournament)
-            ->groupBy('id_division');
-        foreach ($tournamentResults as $divisionIndex => $tournamentResult) {
-            $orderedGroupResult = $tournamentResult->orderBy('points')->take(4);
+        $gamePlans = [0 => 3, 1 => 2, 2 => 1, 3 => 0];
+        $countDivisions = array_keys($tournamentResults);
+        if (count($countDivisions) < 2)
+            throw new ConflictHttpException("Невозможно провести четвертьфинал между дивизионами. Дивизионов должно быть всего два!");
+
+        $teamsTopForQuarterFinaleFirstDivision = $tournamentResults[$countDivisions[0]];
+        $teamsTopForQuarterFinaleSecondDivision = $tournamentResults[$countDivisions[1]];
+
+        $semifinaleTeams = [];
+        foreach ($gamePlans as $firstTeamPlace => $secondTeamPlace) {
+            $teamHome = $teamsTopForQuarterFinaleFirstDivision[$firstTeamPlace];
+            $teamGuest = $teamsTopForQuarterFinaleSecondDivision[$firstTeamPlace];
+
+            $countGoalHome = rand(1, 10);
+            $countGoalGuest = rand(1, 10);
+            if ($countGoalHome == $countGoalGuest)
+                $countGoalHome += $countGoalHome + 1;
+
+            $matchResult = $this->matchRepository->createMatch([
+                'id_team_home' => $teamHome->id,
+                'id_team_guest' => $teamGuest->id,
+                'count_goal_home' => $countGoalHome,
+                'count_goal_guest' => $countGoalGuest,
+                'id_stage' => 2
+            ]);
+            if ($countGoalHome > $countGoalGuest)
+                $semifinaleTeams[] = $teamHome;
+
+            else if ($countGoalHome < $countGoalGuest)
+                $semifinaleTeams[] = $teamGuest;
+
         }
+        return $semifinaleTeams;
+    }
+
+    /**
+     * Генерация для каждого дивизиона топ 4 команды
+     * @param Collection $tournamentResults Результаты команд в турнире
+     * @return array Вернем массив данных с топ 4 результатов для каждого дивизиона
+     */
+    private function generateTopTeamResultByDivision(Collection $tournamentResults)
+    {
+        $groupedByDivisionTournamentResults = $tournamentResults->groupBy('id_division');
+        $response = [];
+        foreach ($groupedByDivisionTournamentResults as $divisionId => $divisionResults) {
+            $orderedByPointsResult = $divisionResults->sortByDesc('points')->take(4);
+            $response[$divisionId] = $orderedByPointsResult->values();
+        }
+        return $response;
     }
 }
