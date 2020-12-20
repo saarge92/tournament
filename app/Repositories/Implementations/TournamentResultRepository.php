@@ -4,8 +4,10 @@
 namespace App\Repositories\Implementations;
 
 
+use App\Models\Division;
 use App\Models\TournamentResult;
 use App\Repositories\Interfaces\ITournamentResultRepository;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Репозиторий для работы с сущностью tournament_results
@@ -55,5 +57,21 @@ class TournamentResultRepository implements ITournamentResultRepository
     {
         return TournamentResult::where(['id_tournament' => $tournamentId])
             ->orderBy('points', 'DESC')->get();
+    }
+
+    /**
+     * Получение данных результатов турнира по Id
+     * по каждому дивизиону
+     * @param int $tournamentId Id турнира
+     * @return \Illuminate\Support\Collection
+     */
+    function getTournamentResultByTournamentIdGroupedByDivision(int $tournamentId)
+    {
+        return DB::table('divisions as d')
+            ->join('teams as t', DB::raw('t.id_division'), '=', DB::raw('d.id'))
+            ->join('tournament_results  as tr', DB::raw('tr.id_team'), '=', DB::raw('t.id'))
+            ->where(['tr.id_tournament' => $tournamentId])
+            ->orderBy('d.id')->orderBy('t.id')
+            ->get();
     }
 }

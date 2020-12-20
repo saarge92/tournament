@@ -21,4 +21,6 @@ interface ITournamentResultRepository
     function getTournamentResultById(int $id): ?TournamentResult;
 
     function getTournamentResultByTournamentId(int $tournamentId);
+
+    function getTournamentResultByTournamentIdGroupedByDivision(int $tournamentId);
 }
