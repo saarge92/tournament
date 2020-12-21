@@ -57,8 +57,15 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             $semifinalResults = $this->generateSemifinal($quarterFinalResult['teams'], $idTournament);
             $finalResponse['semifinal'] = $semifinalResults;
 
-            $thirdPlaceResult = $this->generateThirdPlaceFinal($semifinalResults['teams'], $idTournament);
+            $thirdPlaceResult = $this->generateThirdPlaceAndFinal($semifinalResults['third_place_teams'], $idTournament, 4, 3, 4);
             $finalResponse['third_place_tournament'] = $thirdPlaceResult;
+
+
+            $finalResults = $this->generateThirdPlaceAndFinal($semifinalResults['teams'], $idTournament, 5, 1, 2);
+            $finalResponse['final_tournament'] = $finalResults;
+
+            $this->fillFinaleResults($finalResponse, $finalResults, 1, 2);
+            $this->fillFinaleResults($finalResponse, $thirdPlaceResult, 3, 4);
 
         } catch (\Exception $exception) {
             DB::rollBack();
@@ -68,12 +75,39 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
     }
 
     /**
+     * Заполняем результаты команд в финале и в борьбе за 3 место
+     * @param iterable $finalResponse По ссылке передаем текущий массив с финальными результатами
+     * @param iterable $playoffResults Результат матчей за 3 место или финал
+     * @param int $placeWinner Место которое занимает команда при выигрыше
+     * @param int $placeLooser Место, которое занимает команда при проигрыше
+     */
+    private function fillFinaleResults(iterable &$finalResponse, iterable $playoffResults, int $placeWinner, int $placeLooser)
+    {
+        $finalResponse['final_results'][] = [
+            'id_team' => $playoffResults['winner']['id'],
+            'name' => $playoffResults['winner']['name'],
+            'id_division' => $playoffResults['winner']['id_division'],
+            'place' => $placeWinner,
+        ];
+        $finalResponse['final_results'][] = [
+            'id_team' => $playoffResults['looser']['id'],
+            'name' => $playoffResults['looser']['name'],
+            'id_division' => $playoffResults['looser']['id_division'],
+            'place' => $placeLooser
+        ];
+    }
+
+    /**
      * Генерация матча за 3 место
      * @param array $teams Команды, участвующие в матче
      * @param int $idTournament Id турнира
-     * @return array Вернем массив с результатами матчей за 3 место
+     * @param int $idStage Id этапа на котором проходят финальные игры (игра за третье и финал)
+     * @param int $placeWinner Место для победителя
+     * @param int $placeLooser Место для проигравшего
+     * @return array Вернем массив с результатами матчей (3-место и финал)
      */
-    private function generateThirdPlaceFinal(array $teams, int $idTournament): array
+    private function generateThirdPlaceAndFinal(array $teams, int $idTournament, int $idStage,
+                                                int $placeWinner, int $placeLooser): array
     {
         $response = [];
         $countGoalHome = rand(1, 10);
@@ -86,7 +120,7 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             'id_tournament' => $idTournament,
             'id_team_home' => $teamHome['id'],
             'id_team_guest' => $teamGuest['id'],
-            'id_stage' => 4,
+            'id_stage' => $idStage,
             'count_goal_team_home' => $countGoalHome,
             'count_goal_team_guest' => $countGoalGuest
         ]);
@@ -97,12 +131,12 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             $this->finaleRepository->createFinalResult([
                 'id_tournament' => $idTournament,
                 'id_team' => $teamHome['id'],
-                'place' => 3
+                'place' => $placeWinner
             ]);
             $this->finaleRepository->createFinalResult([
                 'id_tournament' => $idTournament,
                 'id_team' => $teamGuest['id'],
-                'place' => 4
+                'place' => $placeLooser
             ]);
         } else {
             $response['winner'] = $teamGuest;
@@ -111,16 +145,17 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             $this->finaleRepository->createFinalResult([
                 'id_tournament' => $idTournament,
                 'id_team' => $teamGuest['id'],
-                'place' => 3
+                'place' => $placeWinner
             ]);
             $this->finaleRepository->createFinalResult([
                 'id_tournament' => $idTournament,
                 'id_team' => $teamHome['id'],
-                'place' => 4
+                'place' => $placeLooser
             ]);
         }
         return $response;
     }
+
 
     /**
      * Генерация полуфиналов
