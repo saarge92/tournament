@@ -57,11 +57,69 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             $semifinalResults = $this->generateSemifinal($quarterFinalResult['teams'], $idTournament);
             $finalResponse['semifinal'] = $semifinalResults;
 
+            $thirdPlaceResult = $this->generateThirdPlaceFinal($semifinalResults['teams'], $idTournament);
+            $finalResponse['third_place_tournament'] = $thirdPlaceResult;
+
         } catch (\Exception $exception) {
             DB::rollBack();
             throw new ConflictHttpException($exception);
         }
         return $finalResponse;
+    }
+
+    /**
+     * Генерация матча за 3 место
+     * @param array $teams Команды, участвующие в матче
+     * @param int $idTournament Id турнира
+     * @return array Вернем массив с результатами матчей за 3 место
+     */
+    private function generateThirdPlaceFinal(array $teams, int $idTournament): array
+    {
+        $response = [];
+        $countGoalHome = rand(1, 10);
+        $countGoalGuest = rand(1, 10);
+        $teamHome = $teams[0];
+        $teamGuest = $teams[1];
+        if ($countGoalGuest == $countGoalHome)
+            $countGoalHome += 1;
+        $this->matchRepository->createMatch([
+            'id_tournament' => $idTournament,
+            'id_team_home' => $teamHome['id'],
+            'id_team_guest' => $teamGuest['id'],
+            'id_stage' => 4,
+            'count_goal_team_home' => $countGoalHome,
+            'count_goal_team_guest' => $countGoalGuest
+        ]);
+        if ($countGoalHome > $countGoalGuest) {
+            $response['winner'] = $teamHome;
+            $response['looser'] = $teamGuest;
+            $response['score'] = $countGoalHome . ":" . $countGoalGuest;
+            $this->finaleRepository->createFinalResult([
+                'id_tournament' => $idTournament,
+                'id_team' => $teamHome['id'],
+                'place' => 3
+            ]);
+            $this->finaleRepository->createFinalResult([
+                'id_tournament' => $idTournament,
+                'id_team' => $teamGuest['id'],
+                'place' => 4
+            ]);
+        } else {
+            $response['winner'] = $teamGuest;
+            $response['looser'] = $teamHome;
+            $response['score'] = $countGoalGuest . ":" . $countGoalHome;
+            $this->finaleRepository->createFinalResult([
+                'id_tournament' => $idTournament,
+                'id_team' => $teamGuest['id'],
+                'place' => 3
+            ]);
+            $this->finaleRepository->createFinalResult([
+                'id_tournament' => $idTournament,
+                'id_team' => $teamHome['id'],
+                'place' => 4
+            ]);
+        }
+        return $response;
     }
 
     /**
