@@ -7,6 +7,7 @@ namespace App\Services\Playoffs;
 use App\Interfaces\Playoffs\IPlayoffGeneratorService;
 use App\Repositories\Interfaces\IMatchRepository;
 use App\Repositories\Interfaces\IResultFinaleRepository;
+use App\Repositories\Interfaces\ITournamentRepository;
 use App\Repositories\Interfaces\ITournamentResultRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -23,13 +24,15 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
     public ITournamentResultRepository $tournamentResultRepository;
     public IResultFinaleRepository $finaleRepository;
     public IMatchRepository $matchRepository;
+    public ITournamentRepository $tournamentRepository;
 
     public function __construct(ITournamentResultRepository $tournamentResultRepository, IResultFinaleRepository $resultFinaleRepository,
-                                IMatchRepository $matchRepository)
+                                IMatchRepository $matchRepository, ITournamentRepository $tournamentRepository)
     {
         $this->tournamentResultRepository = $tournamentResultRepository;
         $this->finaleRepository = $resultFinaleRepository;
         $this->matchRepository = $matchRepository;
+        $this->tournamentRepository = $tournamentRepository;
     }
 
     /**
@@ -39,6 +42,10 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
      */
     public function generatePlayOfForTournament(int $idTournament)
     {
+        $tournament = $this->tournamentRepository->getTournamentById($idTournament);
+        if (!$tournament)
+            throw new ConflictHttpException("Такой турнир не найен");
+
         $tournamentResults = $this->tournamentResultRepository->getTournamentResultByTournamentIdGroupedByDivision($idTournament);
         if (!$tournamentResults)
             return [];
@@ -48,7 +55,9 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             return $resultFinale;
 
         $groupedByDivisionTopTeamResult = $this->generateTopTeamResultByDivision($tournamentResults);
-        $finalResponse = [];
+        $finalResponse['tournament_id'] = $tournament->id;
+        $finalResponse['tournament_name'] = $tournament->name;
+
         DB::beginTransaction();
         try {
             $quarterFinalResult = $this->generateQuarterFinale($groupedByDivisionTopTeamResult);
