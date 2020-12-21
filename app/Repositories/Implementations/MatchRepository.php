@@ -71,12 +71,13 @@ class MatchRepository implements IMatchRepository
             [$tournamentId, $stageId])->orderBy('id', 'ASC')->get();
     }
 
-    public function getMatchesByTournamentAndStageWithFullReview(int $tournamentId, int $stageId)
+    public function getMatchesByTournamentForStages(int $tournamentId, array $stages)
     {
         return DB::table('matches as m')
             ->join('teams as t1', 't1.id', '=', 'm.id_team_home')
             ->join('teams  as t2', 't2.id', '=', 'm.id_team_guest')
-            ->where(['m.id_tournament' => $tournamentId, 'm.id_stage' => $stageId])
+            ->where(['m.id_tournament' => $tournamentId])
+            ->whereIn('id_stage', $stages)
             ->selectRaw('t1.name as team_home_name, t2.name as team_guest_name,
                                   t1.id_division as team_home_division, t2.id_division as team_guest_division, m.*')
             ->orderBy('t1.id')->orderBy('t2.id')

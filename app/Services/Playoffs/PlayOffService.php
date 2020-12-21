@@ -52,51 +52,50 @@ class PlayOffService implements IPlayOffService
         $response['id_tournament'] = $tournament->name;
         $response['tournament_name'] = $tournament->name;
 
-        $quarterFinalResults = $this->getInfoAboutQuarterFinaleMatches($tournament->id);
-        $response['quarter_final'] = $quarterFinalResults;
+        $idStageQuarterFinal = 2;
+        $idStageSemifinal = 3;
+        $idStageThirdPlace = 4;
+        $isStageFinale = 5;
 
-
-        $response['final_results'] = $this->finaleRepository->getFinaleResultByTournamentId($tournament->id);
+        $allFinalMatches = $this->matchRepository->getMatchesByTournamentForStages($tournament->id, [2, 3, 4, 5]);
+        $groupedByStageFinalMatches = $allFinalMatches->groupBy('id_stage');
+        foreach ($groupedByStageFinalMatches as $stageIndex => $finalResults) {
+            switch ($stageIndex) {
+                case $idStageQuarterFinal:
+                {
+                    $this->initQuarterResponseForTournamentResponse($finalResults, $response);
+                    break;
+                }
+            }
+        }
         return $response;
     }
 
-    /**
-     * Получение данных четвертьфинала
-     * @param int $idTournament Id турнира
-     * @return array Вернем массив с данными турниров
-     */
-    public function getInfoAboutQuarterFinaleMatches(int $idTournament): array
+    private function initQuarterResponseForTournamentResponse(iterable $finalResults, &$response)
     {
-        $quarterFinalResponse = [];
-        $quarterFinalResults = $this->matchRepository->getMatchesByTournamentAndStageWithFullReview($idTournament, 2);
-        foreach ($quarterFinalResults as $quarterFinalResult) {
-            $quarterFinalResponse['result_matches'][] = [
+        $response['quarter_finale'] = [];
+        $resultMatchesRow = [];
+        foreach ($finalResults as $finalResult) {
+            $matchResultRow = [
                 'team_home' => [
-                    'id' => $quarterFinalResult->id_team_home,
-                    'name' => $quarterFinalResult->team_home_name,
-                    'id_division' => $quarterFinalResult->team_home_division
+                    'id' => $finalResult->id_team_home,
+                    'name' => $finalResult->team_home_name,
+                    'id_division' => $finalResult->team_home_division
                 ],
                 'team_guest' => [
-                    'id' => $quarterFinalResult->id_team_guest,
-                    'name' => $quarterFinalResult->team_guest_name,
-                    'id_division' => $quarterFinalResult->team_guest_division
+                    'id' => $finalResult->id_team_guest,
+                    'name' => $finalResult->team_guest_name,
+                    'id_division' => $finalResult->team_guest_division
                 ],
-                'score' => $quarterFinalResult->count_goal_team_home . ":" . $quarterFinalResult->count_goal_team_guest
+                'score' => $finalResult->count_goal_team_home . ":" . $finalResult->count_goal_team_guest
             ];
-            if ($quarterFinalResult->count_goal_team_home > $quarterFinalResult->count_goal_team_guest)
-                $quarterFinalResponse['team_winners'][] = [
-                    'id' => $quarterFinalResult->id_team_home,
-                    'name' => $quarterFinalResult->team_home_name,
-                    'id_division' => $quarterFinalResult->team_home_division
-                ];
-            else if ($quarterFinalResult->count_goal_team_home < $quarterFinalResult->count_goal_team_guest)
-                $quarterFinalResponse['team_winners'][] = [
-                    'id' => $quarterFinalResult->id_team_guest,
-                    'name' => $quarterFinalResult->team_guest_name,
-                    'id_division' => $quarterFinalResult->team_guest_division
-                ];
-        }
-        return $quarterFinalResponse;
-    }
+            if ($finalResult->count_goal_team_home > $finalResult->count_goal_team_guest) {
 
+            } else if ($finalResult->count_goal_team_home < $finalResult->count_goal_team_guest) {
+
+            }
+            $resultMatchesRow['result_matches'][] = $matchResultRow;
+        }
+        $response['quarter_final'][] = $resultMatchesRow;
+    }
 }
