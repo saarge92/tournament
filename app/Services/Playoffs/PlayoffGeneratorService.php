@@ -48,14 +48,16 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             return $resultFinale;
 
         $groupedByDivisionTopTeamResult = $this->generateTopTeamResultByDivision($tournamentResults);
+        $finalResponse = [];
         DB::beginTransaction();
         try {
             $quarterFinalResult = $this->generateQuarterFinale($groupedByDivisionTopTeamResult);
+            $finalResponse['quarter_final'] = $quarterFinalResult;
         } catch (\Exception $exception) {
             DB::rollBack();
             throw new ConflictHttpException($exception);
         }
-        return $quarterFinalResult;
+        return $finalResponse;
     }
 
     /**
@@ -83,21 +85,42 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             if ($countGoalHome == $countGoalGuest)
                 $countGoalHome += $countGoalHome + 1;
 
-            $matchResult = $this->matchRepository->createMatch([
+            $this->matchRepository->createMatch([
                 'id_team_home' => $teamHome->id,
                 'id_team_guest' => $teamGuest->id,
                 'count_goal_home' => $countGoalHome,
                 'count_goal_guest' => $countGoalGuest,
                 'id_stage' => 2
             ]);
+
+            $semifinaleTeams['result_matches'][] = [
+                'team_home' => $this->getShortInfoAboutTeamInfo($teamHome),
+                'team_guest' => $this->getShortInfoAboutTeamInfo($teamGuest),
+                'score' => $countGoalHome . ":" . $countGoalGuest
+            ];
+
             if ($countGoalHome > $countGoalGuest)
-                $semifinaleTeams[] = $teamHome;
+                $semifinaleTeams['teams'][] = $this->getShortInfoAboutTeamInfo($teamHome);
 
             else if ($countGoalHome < $countGoalGuest)
-                $semifinaleTeams[] = $teamGuest;
+                $semifinaleTeams['teams'][] = $this->getShortInfoAboutTeamInfo($teamGuest);
 
         }
         return $semifinaleTeams;
+    }
+
+    /**
+     *
+     * @param \stdClass $teamInfo
+     * @return array
+     */
+    private function getShortInfoAboutTeamInfo(\stdClass $teamInfo)
+    {
+        return [
+            'id' => $teamInfo->id,
+            'name' => $teamInfo->name,
+            'id_division' => $teamInfo->id_division
+        ];
     }
 
     /**
