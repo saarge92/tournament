@@ -61,6 +61,6 @@ class MatchRepository implements IMatchRepository
     function getMatchesByTeamIdAndTournament(int $idTeam, int $tournamentId, int $stageId)
     {
         return Match::whereRaw("(id_team_home = ? OR id_team_guest = ?) AND (id_tournament = ? and id_stage =?)",
-            [$idTeam, $idTeam, $tournamentId, $stageId])->orderBy('created_at', 'DESC')->get();
+            [$idTeam, $idTeam, $tournamentId, $stageId])->orderBy('id', 'ASC')->get();
     }
 }
