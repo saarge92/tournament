@@ -53,11 +53,61 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
         try {
             $quarterFinalResult = $this->generateQuarterFinale($groupedByDivisionTopTeamResult);
             $finalResponse['quarter_final'] = $quarterFinalResult;
+
+            $semifinalResults = $this->generateSemifinal($quarterFinalResult['teams'], $idTournament);
+            $finalResponse['semifinal'] = $semifinalResults;
+
         } catch (\Exception $exception) {
             DB::rollBack();
             throw new ConflictHttpException($exception);
         }
         return $finalResponse;
+    }
+
+    /**
+     * Генерация полуфиналов
+     * @param array $teams Команды, участвующие в полуфинальных матчах
+     * @param int $idTournament Id турнира, в котором проходят полуфинальные матчи
+     * @return array Вернем массив с данными победителей
+     */
+    private function generateSemifinal(array $teams, int $idTournament): array
+    {
+        if (count($teams) != 4)
+            throw new ConflictHttpException("Невозможно провести полуфинал, если команд больше или меньше 4");
+
+        $gamePlan = [0 => 3, 1 => 2];
+        $response = [];
+        foreach ($gamePlan as $firstIdTeam => $secondIdTeam) {
+            $teamHome = $teams[$firstIdTeam];
+            $teamGuest = $teams[$secondIdTeam];
+
+            $countGoalTeamHome = rand(1, 10);
+            $countGoalTeamGuest = rand(1, 10);
+            if ($countGoalTeamHome == $countGoalTeamGuest)
+                $countGoalTeamHome += 1;
+
+            $this->matchRepository->createMatch([
+                'id_tournament' => $idTournament,
+                'id_stage' => 3,
+                'id_team_home' => $teamHome['id'],
+                'id_team_guest' => $teamGuest['id'],
+                'count_goal_team_home' => $countGoalTeamHome,
+                'count_goal_team_guest' => $countGoalTeamGuest
+            ]);
+            if ($countGoalTeamHome > $countGoalTeamGuest) {
+                $response['teams'][] = $teamHome;
+                $response['third_place_teams'][] = $teamGuest;
+            } else if ($countGoalTeamHome < $countGoalTeamGuest) {
+                $response['teams'][] = $teamGuest;
+                $response['third_place_teams'][] = $teamHome;
+            }
+            $response['result_matches'][] = [
+                'team_home' => $teamHome,
+                'team_guest' => $teamGuest,
+                'score' => $countGoalTeamHome . ":" . $countGoalTeamGuest
+            ];
+        }
+        return $response;
     }
 
     /**
