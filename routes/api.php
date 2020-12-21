@@ -25,6 +25,10 @@ Route::get('/qualification/tournament/{id}', [
     'uses' => 'QualificationController@getQualificationByTournamentId'
 ]);
 
-Route::post('/playoff/{id}/generate',[
+Route::post('/playoff/tournament/{id}/generate',[
     'uses' => 'PlayOffGeneratorController@generatePlayOff'
+]);
+
+Route::get('/playoff/tournament/{id}',[
+    'uses' => 'PlayOffController@getPlayOffInfo'
 ]);

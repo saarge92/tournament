@@ -21,4 +21,8 @@ interface IMatchRepository
     function getMatchByTeamTournamentStage(int $teamHome, int $teamGuest, int $idTournament, int $idStage);
 
     function getMatchesByTeamIdAndTournament(int $idTeam, int $tournamentId, int $stageId);
+
+    function getMatchesByTournamentAndStage(int $tournamentId, int $stageId);
+
+    function getMatchesByTournamentAndStageWithFullReview(int $tournamentId, int $stageId);
 }

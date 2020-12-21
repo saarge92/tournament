@@ -41,6 +41,6 @@ class ResultFinaleRepository implements IResultFinaleRepository
      */
     public function getFinaleResultByTournamentId(int $idTournament)
     {
-        return ResultFinal::where(['id_tournament' => $idTournament])->get();
+        return ResultFinal::where(['id_tournament' => $idTournament])->orderBy('place')->get();
     }
 }

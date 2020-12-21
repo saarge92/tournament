@@ -6,6 +6,7 @@ namespace App\Repositories\Implementations;
 
 use App\Models\Match;
 use App\Repositories\Interfaces\IMatchRepository;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Репозиторий по работе с сущностью матчей (matches)
@@ -62,5 +63,23 @@ class MatchRepository implements IMatchRepository
     {
         return Match::whereRaw("(id_team_home = ? OR id_team_guest = ?) AND (id_tournament = ? and id_stage =?)",
             [$idTeam, $idTeam, $tournamentId, $stageId])->orderBy('id', 'ASC')->get();
+    }
+
+    function getMatchesByTournamentAndStage(int $tournamentId, int $stageId)
+    {
+        return Match::whereRaw("id_tournament = ? and id_stage =?",
+            [$tournamentId, $stageId])->orderBy('id', 'ASC')->get();
+    }
+
+    public function getMatchesByTournamentAndStageWithFullReview(int $tournamentId, int $stageId)
+    {
+        return DB::table('matches as m')
+            ->join('teams as t1', 't1.id', '=', 'm.id_team_home')
+            ->join('teams  as t2', 't2.id', '=', 'm.id_team_guest')
+            ->where(['m.id_tournament' => $tournamentId, 'm.id_stage' => $stageId])
+            ->selectRaw('t1.name as team_home_name, t2.name as team_guest_name,
+                                  t1.id_division as team_home_division, t2.id_division as team_guest_division, m.*')
+            ->orderBy('t1.id')->orderBy('t2.id')
+            ->get();
     }
 }

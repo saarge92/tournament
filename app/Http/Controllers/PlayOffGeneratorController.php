@@ -21,7 +21,7 @@ class PlayOffGeneratorController extends Controller
     }
 
     /**
-     * Генерация турнира по запросу POST /playoff/{id}/generate
+     * Генерация турнира по запросу POST /playoff/tournament/{id}/generate
      * @param int $tournamentId Id турнира
      * @return JsonResponse Вернет json-ответ с данными сгенерированных плей-офф результатов
      */

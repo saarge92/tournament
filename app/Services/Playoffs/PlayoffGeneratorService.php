@@ -5,6 +5,7 @@ namespace App\Services\Playoffs;
 
 
 use App\Interfaces\Playoffs\IPlayoffGeneratorService;
+use App\Interfaces\Playoffs\IPlayOffService;
 use App\Repositories\Interfaces\IMatchRepository;
 use App\Repositories\Interfaces\IResultFinaleRepository;
 use App\Repositories\Interfaces\ITournamentRepository;
@@ -25,14 +26,17 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
     public IResultFinaleRepository $finaleRepository;
     public IMatchRepository $matchRepository;
     public ITournamentRepository $tournamentRepository;
+    public IPlayOffService $playoffService;
 
     public function __construct(ITournamentResultRepository $tournamentResultRepository, IResultFinaleRepository $resultFinaleRepository,
-                                IMatchRepository $matchRepository, ITournamentRepository $tournamentRepository)
+                                IMatchRepository $matchRepository, ITournamentRepository $tournamentRepository,
+                                IPlayOffService $playOffService)
     {
         $this->tournamentResultRepository = $tournamentResultRepository;
         $this->finaleRepository = $resultFinaleRepository;
         $this->matchRepository = $matchRepository;
         $this->tournamentRepository = $tournamentRepository;
+        $this->playoffService = $playOffService;
     }
 
     /**
@@ -52,7 +56,7 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
 
         $resultFinale = $this->finaleRepository->getFinaleResultByTournamentId($idTournament);
         if (count($resultFinale) > 0)
-            return $resultFinale;
+            return $this->playoffService->getPlayOffResultsByTournamentId($idTournament);
 
         $groupedByDivisionTopTeamResult = $this->generateTopTeamResultByDivision($tournamentResults);
         $finalResponse['tournament_id'] = $tournament->id;
@@ -60,21 +64,22 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
 
         DB::beginTransaction();
         try {
-            $quarterFinalResult = $this->generateQuarterFinale($groupedByDivisionTopTeamResult);
+            $quarterFinalResult = $this->generateQuarterFinale($groupedByDivisionTopTeamResult, $idTournament);
             $finalResponse['quarter_final'] = $quarterFinalResult;
 
-            $semifinalResults = $this->generateSemifinal($quarterFinalResult['teams'], $idTournament);
+            $semifinalResults = $this->generateSemifinal($quarterFinalResult['team_winners'], $idTournament);
             $finalResponse['semifinal'] = $semifinalResults;
 
             $thirdPlaceResult = $this->generateThirdPlaceAndFinal($semifinalResults['third_place_teams'], $idTournament, 4, 3, 4);
             $finalResponse['third_place_tournament'] = $thirdPlaceResult;
 
 
-            $finalResults = $this->generateThirdPlaceAndFinal($semifinalResults['teams'], $idTournament, 5, 1, 2);
+            $finalResults = $this->generateThirdPlaceAndFinal($semifinalResults['team_winners'], $idTournament, 5, 1, 2);
             $finalResponse['final_tournament'] = $finalResults;
 
             $this->fillFinaleResults($finalResponse, $finalResults, 1, 2);
             $this->fillFinaleResults($finalResponse, $thirdPlaceResult, 3, 4);
+            DB::commit();
 
         } catch (\Exception $exception) {
             DB::rollBack();
@@ -197,10 +202,10 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
                 'count_goal_team_guest' => $countGoalTeamGuest
             ]);
             if ($countGoalTeamHome > $countGoalTeamGuest) {
-                $response['teams'][] = $teamHome;
+                $response['team_winners'][] = $teamHome;
                 $response['third_place_teams'][] = $teamGuest;
             } else if ($countGoalTeamHome < $countGoalTeamGuest) {
-                $response['teams'][] = $teamGuest;
+                $response['team_winners'][] = $teamGuest;
                 $response['third_place_teams'][] = $teamHome;
             }
             $response['result_matches'][] = [
@@ -215,9 +220,10 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
     /**
      * Генерация четверь-финала
      * @param array $tournamentResults Результаты турнира по дивизионам
+     * @param int $tournamentId Id турнира
      * @return mixed
      */
-    private function generateQuarterFinale(array $tournamentResults)
+    private function generateQuarterFinale(array $tournamentResults, int $tournamentId)
     {
         $gamePlans = [0 => 3, 1 => 2, 2 => 1, 3 => 0];
         $countDivisions = array_keys($tournamentResults);
@@ -240,8 +246,9 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             $this->matchRepository->createMatch([
                 'id_team_home' => $teamHome->id,
                 'id_team_guest' => $teamGuest->id,
-                'count_goal_home' => $countGoalHome,
-                'count_goal_guest' => $countGoalGuest,
+                'count_goal_team_home' => $countGoalHome,
+                'count_goal_team_guest' => $countGoalGuest,
+                'id_tournament' => $tournamentId,
                 'id_stage' => 2
             ]);
 
@@ -252,10 +259,10 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
             ];
 
             if ($countGoalHome > $countGoalGuest)
-                $semifinaleTeams['teams'][] = $this->getShortInfoAboutTeamInfo($teamHome);
+                $semifinaleTeams['team_winners'][] = $this->getShortInfoAboutTeamInfo($teamHome);
 
             else if ($countGoalHome < $countGoalGuest)
-                $semifinaleTeams['teams'][] = $this->getShortInfoAboutTeamInfo($teamGuest);
+                $semifinaleTeams['team_winners'][] = $this->getShortInfoAboutTeamInfo($teamGuest);
 
         }
         return $semifinaleTeams;
