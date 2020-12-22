@@ -2,21 +2,25 @@
     <div>
         <center>Турнир {{ tournamentName }}</center>
         <div id="division_first">
-            <p>{{ firstDivisionName }}</p>
+            <p>Дивизион {{ firstDivisionName }}</p>
             <table id="firstDivisionTable" class="table">
                 <thead>
                 <tr>
-                    <th v-for="teamFirstDivision in Object.values(this.firstDivisionResults)">
-                        {{ Object.values(Object.values(Object.values(teamFirstDivision))) }}
+                    <th>&nbsp;</th>
+                    <th v-for="firstTeamDivision in firstDivisionTeams">
+                        {{ firstTeamDivision.name }}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
-                <!--                <tr>-->
-                <!--                    <th v-for="teamFirstDivision in this.firstDivisionResults">-->
-                <!--                        {{ teamFirstDivision }}-->
-                <!--                    </th>-->
-                <!--                </tr>-->
+                <tr v-for="firstTeamDivision in firstDivisionTeams">
+                    <td>
+                        {{ firstTeamDivision.name }}
+                    </td>
+                    <td v-for="resultMatch of firstDivisionResults">
+                        {{ resultMatch }}
+                    </td>
+                </tr>
                 </tbody>
             </table>
             <button class="btn btn-primary" v-on:click="generateTournament">
@@ -28,7 +32,7 @@
 </template>
 
 <script>
-import {generateTournamentsData} from '../services/qualification_service'
+import {generateTournamentsData, getTeamsByDivision} from '../services/qualification_service'
 
 export default {
     data() {
@@ -38,7 +42,8 @@ export default {
             firstDivisionName: null,
             secondDivisionName: null,
             tables: [],
-            firstDivisionResults: []
+            firstDivisionResults: [],
+            firstDivisionTeams: []
         }
     },
     async mounted() {
@@ -48,13 +53,18 @@ export default {
         async generateTournament() {
             const generatedTournamentData = await generateTournamentsData()
             console.log(generatedTournamentData)
-            this.fillDataAboutQualification(generatedTournamentData)
+            await this.fillDataAboutQualification(generatedTournamentData)
         },
-        fillDataAboutQualification(tournamentResults) {
+        async fillDataAboutQualification(tournamentResults) {
             this.tables = tournamentResults.tables
             this.tournamentName = tournamentResults.tournament_name;
             this.tournamentId = tournamentResults.tournament_id
             this.firstDivisionResults = tournamentResults.tables[0].results
+            this.firstDivisionName = tournamentResults.tables[0].division_name
+            this.firstDivisionTeams = await getTeamsByDivision(tournamentResults.tables[0].division_id)
+
+            const firstResultexample = this.firstDivisionResults[0]['Россия']
+            console.log('Результат первого дивизиона', firstResultexample)
         }
     }
 }

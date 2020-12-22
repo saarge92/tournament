@@ -1958,6 +1958,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1967,7 +1971,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       firstDivisionName: null,
       secondDivisionName: null,
       tables: [],
-      firstDivisionResults: []
+      firstDivisionResults: [],
+      firstDivisionTeams: []
     };
   },
   mounted: function mounted() {
@@ -1999,10 +2004,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 2:
                 generatedTournamentData = _context2.sent;
                 console.log(generatedTournamentData);
+                _context2.next = 6;
+                return _this.fillDataAboutQualification(generatedTournamentData);
 
-                _this.fillDataAboutQualification(generatedTournamentData);
-
-              case 5:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -2011,10 +2016,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     fillDataAboutQualification: function fillDataAboutQualification(tournamentResults) {
-      this.tables = tournamentResults.tables;
-      this.tournamentName = tournamentResults.tournament_name;
-      this.tournamentId = tournamentResults.tournament_id;
-      this.firstDivisionResults = tournamentResults.tables[0].results;
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var firstResultexample;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this2.tables = tournamentResults.tables;
+                _this2.tournamentName = tournamentResults.tournament_name;
+                _this2.tournamentId = tournamentResults.tournament_id;
+                _this2.firstDivisionResults = tournamentResults.tables[0].results;
+                _this2.firstDivisionName = tournamentResults.tables[0].division_name;
+                _context3.next = 7;
+                return Object(_services_qualification_service__WEBPACK_IMPORTED_MODULE_1__["getTeamsByDivision"])(tournamentResults.tables[0].division_id);
+
+              case 7:
+                _this2.firstDivisionTeams = _context3.sent;
+                firstResultexample = _this2.firstDivisionResults[0]['Россия'];
+                console.log('Результат первого дивизиона', firstResultexample);
+
+              case 10:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     }
   }
 });
@@ -20434,7 +20463,7 @@ var render = function() {
       _c("center", [_vm._v("Турнир " + _vm._s(_vm.tournamentName))]),
       _vm._v(" "),
       _c("div", { attrs: { id: "division_first" } }, [
-        _c("p", [_vm._v(_vm._s(_vm.firstDivisionName))]),
+        _c("p", [_vm._v("Дивизион " + _vm._s(_vm.firstDivisionName))]),
         _vm._v(" "),
         _c(
           "table",
@@ -20443,26 +20472,52 @@ var render = function() {
             _c("thead", [
               _c(
                 "tr",
-                _vm._l(Object.values(this.firstDivisionResults), function(
-                  teamFirstDivision
-                ) {
-                  return _c("th", [
-                    _vm._v(
-                      "\n                    " +
-                        _vm._s(
-                          Object.values(
-                            Object.values(Object.values(teamFirstDivision))
-                          )
-                        ) +
-                        "\n                "
-                    )
-                  ])
-                }),
-                0
+                [
+                  _c("th", [_vm._v(" ")]),
+                  _vm._v(" "),
+                  _vm._l(_vm.firstDivisionTeams, function(firstTeamDivision) {
+                    return _c("th", [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(firstTeamDivision.name) +
+                          "\n                "
+                      )
+                    ])
+                  })
+                ],
+                2
               )
             ]),
             _vm._v(" "),
-            _c("tbody")
+            _c(
+              "tbody",
+              _vm._l(_vm.firstDivisionTeams, function(firstTeamDivision) {
+                return _c(
+                  "tr",
+                  [
+                    _c("td", [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(firstTeamDivision.name) +
+                          "\n                "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.firstDivisionResults, function(resultMatch) {
+                      return _c("td", [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(resultMatch) +
+                            "\n                "
+                        )
+                      ])
+                    })
+                  ],
+                  2
+                )
+              }),
+              0
+            )
           ]
         ),
         _vm._v(" "),
@@ -32786,12 +32841,13 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************************!*\
   !*** ./resources/js/services/qualification_service.js ***!
   \********************************************************/
-/*! exports provided: generateTournamentsData */
+/*! exports provided: generateTournamentsData, getTeamsByDivision */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateTournamentsData", function() { return generateTournamentsData; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTeamsByDivision", function() { return getTeamsByDivision; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -32829,6 +32885,34 @@ function _generateTournamentsData() {
     }, _callee);
   }));
   return _generateTournamentsData.apply(this, arguments);
+}
+
+function getTeamsByDivision(_x) {
+  return _getTeamsByDivision.apply(this, arguments);
+}
+
+function _getTeamsByDivision() {
+  _getTeamsByDivision = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(idDivision) {
+    var response;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return axios.get("api/team/division/".concat(idDivision))["catch"](console.log);
+
+          case 2:
+            response = _context2.sent;
+            return _context2.abrupt("return", response.data);
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _getTeamsByDivision.apply(this, arguments);
 }
 
 /***/ }),
