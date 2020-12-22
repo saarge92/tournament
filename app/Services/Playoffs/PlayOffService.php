@@ -55,10 +55,10 @@ class PlayOffService implements IPlayOffService
         $idStageQuarterFinal = 2;
         $idStageSemifinal = 3;
         $idStageThirdPlace = 4;
-        $isStageFinale = 5;
+        $idStageFinale = 5;
 
         $allFinalMatches = $this->matchRepository->getMatchesByTournamentForStages($tournament->id, [2, 3, 4, 5]);
-        $groupedByStageFinalMatches = $allFinalMatches->groupBy('id_stage');
+        $groupedByStageFinalMatches = $allFinalMatches->sortBy('id_stage')->groupBy('id_stage');
         foreach ($groupedByStageFinalMatches as $stageIndex => $finalResults) {
             switch ($stageIndex) {
                 case $idStageQuarterFinal:
@@ -66,14 +66,35 @@ class PlayOffService implements IPlayOffService
                     $this->initQuarterResponseForTournamentResponse($finalResults, $response);
                     break;
                 }
+                case $idStageSemifinal:
+                {
+                    $this->initSemifinal($finalResults, $response);
+                    break;
+                }
+                case $idStageThirdPlace :
+                {
+                    $this->initThirdPlaceAndFinalMatches($finalResults, $response, 'third_place_tournament');
+                    break;
+                }
+                case $idStageFinale:
+                {
+                    $this->initThirdPlaceAndFinalMatches($finalResults, $response, 'final_tournament');
+                    break;
+                }
             }
         }
+        $response['final_results'] = $this->finaleRepository->getFinaleResultByTournamentId($tournament->id);
         return $response;
     }
 
-    private function initQuarterResponseForTournamentResponse(iterable $finalResults, &$response)
+    /**
+     * Формирование ответа с матчами полуфиналов
+     * @param iterable $finalResults Финальные результаты матчей
+     * @param array $response Ссылка на формируемый масив ответа, возвращаемый клиенту
+     */
+    private function initSemifinal(iterable $finalResults, array &$response)
     {
-        $response['quarter_finale'] = [];
+        $response['semifinal'] = [];
         $resultMatchesRow = [];
         foreach ($finalResults as $finalResult) {
             $matchResultRow = [
@@ -89,12 +110,112 @@ class PlayOffService implements IPlayOffService
                 ],
                 'score' => $finalResult->count_goal_team_home . ":" . $finalResult->count_goal_team_guest
             ];
-            if ($finalResult->count_goal_team_home > $finalResult->count_goal_team_guest) {
-
-            } else if ($finalResult->count_goal_team_home < $finalResult->count_goal_team_guest) {
-
-            }
             $resultMatchesRow['result_matches'][] = $matchResultRow;
+            if ($finalResult->count_goal_team_home > $finalResult->count_goal_team_guest) {
+                $resultMatchesRow['team_winners'][] = [
+                    'id' => $finalResult->id_team_home,
+                    'name' => $finalResult->team_home_name,
+                    'id_division' => $finalResult->team_home_division
+                ];
+                $resultMatchesRow['third_place_teams'][] = [
+                    'id' => $finalResult->id_team_guest,
+                    'name' => $finalResult->team_guest_name,
+                    'id_division' => $finalResult->team_guest_division
+                ];
+            } else if ($finalResult->count_goal_team_home < $finalResult->count_goal_team_guest) {
+                $resultMatchesRow['team_winners'][] = [
+                    'id' => $finalResult->id_team_guest,
+                    'name' => $finalResult->team_guest_name,
+                    'id_division' => $finalResult->team_guest_division
+                ];
+                $resultMatchesRow['third_place_teams'][] = [
+                    'id' => $finalResult->id_team_home,
+                    'name' => $finalResult->team_home_name,
+                    'id_division' => $finalResult->team_home_division
+                ];
+            }
+        }
+        $response['semifinal'][] = $resultMatchesRow;
+    }
+
+    /**
+     * Формирование ответа на финальные результаты (матчи за 3 место и финальные матчи)
+     * @param iterable $finalResults Финальные результаты матчей
+     * @param array $response Ссылка на генерируемый ответ пользователю
+     * @param string $keyNameTournament Название турнира в ответе response
+     */
+    private function initThirdPlaceAndFinalMatches(iterable $finalResults, array &$response, string $keyNameTournament)
+    {
+        foreach ($finalResults as $finalResult) {
+            if ($finalResult->count_goal_team_home > $finalResult->count_goal_team_guest) {
+                $response[$keyNameTournament][] = [
+                    'winner' => [
+                        'id' => $finalResult->id_team_home,
+                        'name' => $finalResult->team_home_name,
+                        'id_division' => $finalResult->team_home_division
+                    ],
+                    'looser' => [
+                        'id' => $finalResult->id_team_guest,
+                        'name' => $finalResult->team_guest_name,
+                        'id_division' => $finalResult->team_guest_division
+                    ],
+                    'score' => $finalResult->count_goal_team_home . ":" . $finalResult->count_goal_team_guest
+                ];
+            } else if ($finalResult->count_goal_team_home < $finalResult->count_goal_team_guest) {
+                $response[$keyNameTournament][] = [
+                    'winner' => [
+                        'id' => $finalResult->id_team_guest,
+                        'name' => $finalResult->team_guest_name,
+                        'id_division' => $finalResult->team_guest_division
+                    ],
+                    'looser' => [
+                        'id' => $finalResult->id_team_home,
+                        'name' => $finalResult->team_home_name,
+                        'id_division' => $finalResult->team_home_division
+                    ],
+                    'score' => $finalResult->count_goal_team_guest . ":" . $finalResult->count_goal_team_home
+                ];
+            }
+        }
+    }
+
+    /**
+     * Инициализируем ответ для четверть-финальных матчей при получении данных плей-офф турнира
+     * @param iterable $finalResults Финальные результаты матчей
+     * @param array $response Ссылка на результирующий массив, который пойдет в ответ пользователю
+     */
+    private function initQuarterResponseForTournamentResponse(iterable $finalResults, array &$response)
+    {
+        $response['quarter_final'] = [];
+        $resultMatchesRow = [];
+        foreach ($finalResults as $finalResult) {
+            $matchResultRow = [
+                'team_home' => [
+                    'id' => $finalResult->id_team_home,
+                    'name' => $finalResult->team_home_name,
+                    'id_division' => $finalResult->team_home_division
+                ],
+                'team_guest' => [
+                    'id' => $finalResult->id_team_guest,
+                    'name' => $finalResult->team_guest_name,
+                    'id_division' => $finalResult->team_guest_division
+                ],
+                'score' => $finalResult->count_goal_team_home . ":" . $finalResult->count_goal_team_guest
+            ];
+            $resultMatchesRow['result_matches'][] = $matchResultRow;
+            if ($finalResult->count_goal_team_home > $finalResult->count_goal_team_guest) {
+                $resultMatchesRow['team_winners'][] = [
+                    'id' => $finalResult->id_team_home,
+                    'name' => $finalResult->team_home_name,
+                    'id_division' => $finalResult->team_home_division
+                ];
+            } else if ($finalResult->count_goal_team_home < $finalResult->count_goal_team_guest) {
+                $resultMatchesRow['team_winners'][] = [
+                    'id' => $finalResult->id_team_guest,
+                    'name' => $finalResult->team_guest_name,
+                    'id_division' => $finalResult->team_guest_division
+                ];
+            }
         }
         $response['quarter_final'][] = $resultMatchesRow;
     }
