@@ -6,17 +6,17 @@
             <table id="firstDivisionTable" class="table">
                 <thead>
                 <tr>
-                    <th v-for="teamFirstDivision in this.firstDivisionResults.results">
-                        {{ Object.keys(teamFirstDivision)[0] }}
+                    <th v-for="teamFirstDivision in Object.values(this.firstDivisionResults)">
+                        {{ Object.values(Object.values(Object.values(teamFirstDivision))) }}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th v-for="teamFirstDivision in this.firstDivisionResults.results">
-                        {{ teamFirstDivision }}
-                    </th>
-                </tr>
+                <!--                <tr>-->
+                <!--                    <th v-for="teamFirstDivision in this.firstDivisionResults">-->
+                <!--                        {{ teamFirstDivision }}-->
+                <!--                    </th>-->
+                <!--                </tr>-->
                 </tbody>
             </table>
             <button class="btn btn-primary" v-on:click="generateTournament">
@@ -54,7 +54,7 @@ export default {
             this.tables = tournamentResults.tables
             this.tournamentName = tournamentResults.tournament_name;
             this.tournamentId = tournamentResults.tournament_id
-            this.firstDivisionResults = tournamentResults.tables[0]
+            this.firstDivisionResults = tournamentResults.tables[0].results
         }
     }
 }
