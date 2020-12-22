@@ -47,4 +47,13 @@ class TournamentRepository implements ITournamentRepository
                 ->whereRaw('tournaments.id = tournament_results.id_tournament');
         })->get();
     }
+
+    /**
+     * Получение случайным образом любого турнира
+     * @return mixed
+     */
+    public function getRandomTournament()
+    {
+        return Tournament::orderByRaw("RAND()")->first();
+    }
 }

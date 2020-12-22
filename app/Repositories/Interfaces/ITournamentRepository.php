@@ -18,4 +18,6 @@ interface ITournamentRepository
     function createTournament(array $data): Tournament;
 
     function getUnsettledTournaments();
+
+    function getRandomTournament();
 }

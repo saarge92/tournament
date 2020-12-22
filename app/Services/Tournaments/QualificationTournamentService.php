@@ -38,7 +38,7 @@ class QualificationTournamentService implements IQualificationTournamentService
      * @param int $tournamentId Id Турнира
      * @return array Вернем массив с данными турнира
      */
-    public function getQualificationTournamentResult(int $tournamentId)
+    public function getQualificationTournamentResult(int $tournamentId): array
     {
         $tournament = $this->tournamentRepository->getTournamentById($tournamentId);
         if (!$tournament)
@@ -46,6 +46,8 @@ class QualificationTournamentService implements IQualificationTournamentService
 
         $tournamentResults = $this->tournamentResultRepository->getTournamentResultByTournamentIdGroupedByDivision($tournamentId)
             ->groupBy('id_division');
+        if (count($tournamentResults) <= 0)
+            return [];
         return $this->generateResponseForTournament($tournamentResults, $tournament);
     }
 
