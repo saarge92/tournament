@@ -24,7 +24,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .quarter_final_block{
     margin-left: 1rem;
 }
