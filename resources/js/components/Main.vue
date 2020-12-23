@@ -1,38 +1,20 @@
 <template>
     <div>
         <center>Турнир {{ tournamentName }}</center>
-        <div id="division_first">
-            <p>Дивизион {{ firstDivisionName }}</p>
-            <table id="firstDivisionTable" class="table">
-                <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th v-for="firstTeamDivision in firstDivisionTeams">
-                        {{ firstTeamDivision.name }}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="firstTeamDivision in firstDivisionTeams">
-                    <td>
-                        {{ firstTeamDivision.name }}
-                    </td>
-                    <td v-for="resultMatch of firstDivisionResults">
-                        {{ resultMatch }}
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <button class="btn btn-primary" v-on:click="generateTournament">
-                <i class="fas fa-plus"></i>
-                Генерация турнира
-            </button>
-        </div>
+        <first-division :first-division-name="firstDivisionName"
+                        :first-division-results="firstDivisionResults"
+                        :first-division-teams="firstDivisionTeams"
+        ></first-division>
+        <button class="btn btn-primary" v-on:click="generateTournament">
+            <i class="fas fa-plus"></i>
+            Генерация турнира
+        </button>
     </div>
 </template>
 
 <script>
 import {generateTournamentsData, getTeamsByDivision} from '../services/qualification_service'
+import FirstDivisionTable from "./FirstDivisionTable";
 
 export default {
     data() {
@@ -62,10 +44,10 @@ export default {
             this.firstDivisionResults = tournamentResults.tables[0].results
             this.firstDivisionName = tournamentResults.tables[0].division_name
             this.firstDivisionTeams = await getTeamsByDivision(tournamentResults.tables[0].division_id)
-
-            const firstResultexample = this.firstDivisionResults[0]['Россия']
-            console.log('Результат первого дивизиона', firstResultexample)
         }
+    },
+    components: {
+        'first-division': FirstDivisionTable
     }
 }
 </script>
