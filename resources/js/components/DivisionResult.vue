@@ -1,28 +1,28 @@
 <template>
     <div id="division_first">
-        <p class="division_name">Дивизион {{ firstDivisionName }}</p>
+        <p class="division_name">Дивизион {{ divisionName }}</p>
         <table id="firstDivisionTable" class="table">
             <thead>
             <tr>
                 <th>&nbsp;</th>
-                <th v-for="firstTeamDivision in firstDivisionTeams">
+                <th v-for="firstTeamDivision in divisionTeams">
                     {{ firstTeamDivision.name }}
                 </th>
                 <th>Score</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(firstTeamDivisionColumn,index) in firstDivisionTeams">
+            <tr v-for="(firstTeamDivisionColumn,index) in divisionTeams">
                 <td>
                     {{ firstTeamDivisionColumn.name }}
                 </td>
-                <td v-for="(firstTeamDivisionRow,indexColumn) in firstDivisionTeams">
+                <td v-for="(firstTeamDivisionRow,indexColumn) in divisionTeams">
                     {{
-                        indexColumn == index ? null : firstDivisionResults[index][firstTeamDivisionColumn.name]
+                        indexColumn == index ? null : divisionResults[index][firstTeamDivisionColumn.name]
                             [firstTeamDivisionRow.name]
                     }}
                 </td>
-                <td> {{ Object.values(firstDivisionResults[index])[1] }}</td>
+                <td> {{ Object.values(divisionResults[index])[1] }}</td>
             </tr>
             </tbody>
         </table>
@@ -31,7 +31,7 @@
 
 <script>
 export default {
-    props: ["firstDivisionName", "firstDivisionTeams", "firstDivisionResults"],
+    props: ["divisionName", "divisionTeams", "divisionResults"],
     data() {
         return {}
     },

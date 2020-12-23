@@ -1911,10 +1911,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FirstDivisionTable.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FirstDivisionTable.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DivisionResult.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DivisionResult.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1952,7 +1952,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["firstDivisionName", "firstDivisionTeams", "firstDivisionResults"],
+  props: ["divisionName", "divisionTeams", "divisionResults"],
   data: function data() {
     return {};
   },
@@ -1977,13 +1977,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_qualification_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../services/qualification_service */ "./resources/js/services/qualification_service.js");
-/* harmony import */ var _FirstDivisionTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FirstDivisionTable */ "./resources/js/components/FirstDivisionTable.vue");
+/* harmony import */ var _DivisionResult__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DivisionResult */ "./resources/js/components/DivisionResult.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
 //
 //
 //
@@ -2009,7 +2013,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       secondDivisionName: null,
       tables: [],
       firstDivisionResults: [],
-      firstDivisionTeams: []
+      firstDivisionTeams: [],
+      secondDivisionTeams: [],
+      secondDivisionResults: []
     };
   },
   mounted: function mounted() {
@@ -2070,8 +2076,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 7:
                 _this2.firstDivisionTeams = _context3.sent;
+                _this2.secondDivisionName = tournamentResults.tables[1].division_name;
+                _context3.next = 11;
+                return Object(_services_qualification_service__WEBPACK_IMPORTED_MODULE_1__["getTeamsByDivision"])(tournamentResults.tables[1].division_id);
 
-              case 8:
+              case 11:
+                _this2.secondDivisionTeams = _context3.sent;
+                _this2.secondDivisionResults = tournamentResults.tables[1].results;
+
+              case 13:
               case "end":
                 return _context3.stop();
             }
@@ -2081,16 +2094,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   components: {
-    'first-division': _FirstDivisionTable__WEBPACK_IMPORTED_MODULE_2__["default"]
+    'first-division-info': _DivisionResult__WEBPACK_IMPORTED_MODULE_2__["default"],
+    'second-division-info': _DivisionResult__WEBPACK_IMPORTED_MODULE_2__["default"]
   }
 });
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css&":
-/*!************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css& ***!
-  \************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2099,7 +2113,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.division_name[data-v-777dd908] {\n    text-decoration: underline;\n    color: red;\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n.division_name[data-v-6e2a9556] {\n    text-decoration: underline;\n    color: red;\n    text-align: center;\n}\n", ""]);
 
 // exports
 
@@ -20510,15 +20524,15 @@ try {
 
 /***/ }),
 
-/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css&":
-/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css& ***!
-  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css&");
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css&");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -21124,10 +21138,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FirstDivisionTable.vue?vue&type=template&id=777dd908&scoped=true&":
-/*!*********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FirstDivisionTable.vue?vue&type=template&id=777dd908&scoped=true& ***!
-  \*********************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DivisionResult.vue?vue&type=template&id=6e2a9556&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DivisionResult.vue?vue&type=template&id=6e2a9556&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -21141,7 +21155,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "division_first" } }, [
     _c("p", { staticClass: "division_name" }, [
-      _vm._v("Дивизион " + _vm._s(_vm.firstDivisionName))
+      _vm._v("Дивизион " + _vm._s(_vm.divisionName))
     ]),
     _vm._v(" "),
     _c("table", { staticClass: "table", attrs: { id: "firstDivisionTable" } }, [
@@ -21151,7 +21165,7 @@ var render = function() {
           [
             _c("th", [_vm._v(" ")]),
             _vm._v(" "),
-            _vm._l(_vm.firstDivisionTeams, function(firstTeamDivision) {
+            _vm._l(_vm.divisionTeams, function(firstTeamDivision) {
               return _c("th", [
                 _vm._v(
                   "\n                " +
@@ -21169,10 +21183,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.firstDivisionTeams, function(
-          firstTeamDivisionColumn,
-          index
-        ) {
+        _vm._l(_vm.divisionTeams, function(firstTeamDivisionColumn, index) {
           return _c(
             "tr",
             [
@@ -21184,7 +21195,7 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._l(_vm.firstDivisionTeams, function(
+              _vm._l(_vm.divisionTeams, function(
                 firstTeamDivisionRow,
                 indexColumn
               ) {
@@ -21194,7 +21205,7 @@ var render = function() {
                       _vm._s(
                         indexColumn == index
                           ? null
-                          : _vm.firstDivisionResults[index][
+                          : _vm.divisionResults[index][
                               firstTeamDivisionColumn.name
                             ][firstTeamDivisionRow.name]
                       ) +
@@ -21205,8 +21216,7 @@ var render = function() {
               _vm._v(" "),
               _c("td", [
                 _vm._v(
-                  " " +
-                    _vm._s(Object.values(_vm.firstDivisionResults[index])[1])
+                  " " + _vm._s(Object.values(_vm.divisionResults[index])[1])
                 )
               ])
             ],
@@ -21245,11 +21255,19 @@ var render = function() {
     [
       _c("center", [_vm._v("Турнир " + _vm._s(_vm.tournamentName))]),
       _vm._v(" "),
-      _c("first-division", {
+      _c("first-division-info", {
         attrs: {
-          "first-division-name": _vm.firstDivisionName,
-          "first-division-results": _vm.firstDivisionResults,
-          "first-division-teams": _vm.firstDivisionTeams
+          "division-name": _vm.firstDivisionName,
+          "division-results": _vm.firstDivisionResults,
+          "division-teams": _vm.firstDivisionTeams
+        }
+      }),
+      _vm._v(" "),
+      _c("second-division-info", {
+        attrs: {
+          "division-name": _vm.secondDivisionName,
+          "division-results": _vm.secondDivisionResults,
+          "division-teams": _vm.secondDivisionTeams
         }
       }),
       _vm._v(" "),
@@ -33499,18 +33517,18 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/js/components/FirstDivisionTable.vue":
-/*!********************************************************!*\
-  !*** ./resources/js/components/FirstDivisionTable.vue ***!
-  \********************************************************/
+/***/ "./resources/js/components/DivisionResult.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/DivisionResult.vue ***!
+  \****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _FirstDivisionTable_vue_vue_type_template_id_777dd908_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FirstDivisionTable.vue?vue&type=template&id=777dd908&scoped=true& */ "./resources/js/components/FirstDivisionTable.vue?vue&type=template&id=777dd908&scoped=true&");
-/* harmony import */ var _FirstDivisionTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FirstDivisionTable.vue?vue&type=script&lang=js& */ "./resources/js/components/FirstDivisionTable.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _FirstDivisionTable_vue_vue_type_style_index_0_id_777dd908_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css& */ "./resources/js/components/FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css&");
+/* harmony import */ var _DivisionResult_vue_vue_type_template_id_6e2a9556_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DivisionResult.vue?vue&type=template&id=6e2a9556&scoped=true& */ "./resources/js/components/DivisionResult.vue?vue&type=template&id=6e2a9556&scoped=true&");
+/* harmony import */ var _DivisionResult_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DivisionResult.vue?vue&type=script&lang=js& */ "./resources/js/components/DivisionResult.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _DivisionResult_vue_vue_type_style_index_0_id_6e2a9556_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css& */ "./resources/js/components/DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -33521,66 +33539,66 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
-  _FirstDivisionTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _FirstDivisionTable_vue_vue_type_template_id_777dd908_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _FirstDivisionTable_vue_vue_type_template_id_777dd908_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _DivisionResult_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DivisionResult_vue_vue_type_template_id_6e2a9556_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DivisionResult_vue_vue_type_template_id_6e2a9556_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
-  "777dd908",
+  "6e2a9556",
   null
   
 )
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/FirstDivisionTable.vue"
+component.options.__file = "resources/js/components/DivisionResult.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/FirstDivisionTable.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************!*\
-  !*** ./resources/js/components/FirstDivisionTable.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************/
+/***/ "./resources/js/components/DivisionResult.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/DivisionResult.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./FirstDivisionTable.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FirstDivisionTable.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./DivisionResult.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DivisionResult.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css&":
-/*!*****************************************************************************************************************!*\
-  !*** ./resources/js/components/FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css& ***!
-  \*****************************************************************************************************************/
+/***/ "./resources/js/components/DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css&":
+/*!*************************************************************************************************************!*\
+  !*** ./resources/js/components/DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css& ***!
+  \*************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_style_index_0_id_777dd908_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FirstDivisionTable.vue?vue&type=style&index=0&id=777dd908&scoped=true&lang=css&");
-/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_style_index_0_id_777dd908_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_style_index_0_id_777dd908_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_style_index_0_id_777dd908_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_style_index_0_id_777dd908_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_style_index_0_id_6e2a9556_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DivisionResult.vue?vue&type=style&index=0&id=6e2a9556&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_style_index_0_id_6e2a9556_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_style_index_0_id_6e2a9556_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_style_index_0_id_6e2a9556_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_style_index_0_id_6e2a9556_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
 
 
 /***/ }),
 
-/***/ "./resources/js/components/FirstDivisionTable.vue?vue&type=template&id=777dd908&scoped=true&":
-/*!***************************************************************************************************!*\
-  !*** ./resources/js/components/FirstDivisionTable.vue?vue&type=template&id=777dd908&scoped=true& ***!
-  \***************************************************************************************************/
+/***/ "./resources/js/components/DivisionResult.vue?vue&type=template&id=6e2a9556&scoped=true&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/DivisionResult.vue?vue&type=template&id=6e2a9556&scoped=true& ***!
+  \***********************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_template_id_777dd908_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./FirstDivisionTable.vue?vue&type=template&id=777dd908&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FirstDivisionTable.vue?vue&type=template&id=777dd908&scoped=true&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_template_id_777dd908_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_template_id_6e2a9556_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./DivisionResult.vue?vue&type=template&id=6e2a9556&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DivisionResult.vue?vue&type=template&id=6e2a9556&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_template_id_6e2a9556_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FirstDivisionTable_vue_vue_type_template_id_777dd908_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DivisionResult_vue_vue_type_template_id_6e2a9556_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
