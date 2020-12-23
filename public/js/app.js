@@ -2053,6 +2053,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -2069,7 +2071,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       firstDivisionTeams: [],
       secondDivisionTeams: [],
       secondDivisionResults: [],
-      playOffResults: null
+      playOffResults: null,
+      isLoading: false
     };
   },
   mounted: function mounted() {
@@ -2095,16 +2098,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
+                _this.isLoading = true;
+                _context2.next = 3;
                 return Object(_services_qualification_service__WEBPACK_IMPORTED_MODULE_1__["generateTournamentsData"])();
 
-              case 2:
+              case 3:
                 generatedTournamentData = _context2.sent;
                 console.log(generatedTournamentData);
-                _context2.next = 6;
-                return _this.fillDataAboutQualification(generatedTournamentData);
+                _context2.next = 7;
+                return _this.fillDataAboutQualification(generatedTournamentData)["catch"](function (error) {
+                  _this.loading = false;
+                  alert(error);
+                });
 
-              case 6:
+              case 7:
+                _this.isLoading = false;
+
+              case 8:
               case "end":
                 return _context2.stop();
             }
@@ -2120,14 +2130,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
-                return Object(_services_playoff_service__WEBPACK_IMPORTED_MODULE_2__["generatePlayOff"])(_this2.tournamentId);
+                _this2.isLoading = true;
+                _context3.next = 3;
+                return Object(_services_playoff_service__WEBPACK_IMPORTED_MODULE_2__["generatePlayOff"])(_this2.tournamentId)["catch"](function (error) {
+                  _this2.isLoading = false;
+                  alert(error);
+                });
 
-              case 2:
+              case 3:
                 _this2.playOffResults = _context3.sent;
                 console.log(_this2.playOffResults);
+                _this2.isLoading = false;
 
-              case 4:
+              case 6:
               case "end":
                 return _context3.stop();
             }
@@ -2353,7 +2368,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#buttons-block[data-v-b9c20fb8] {\n    margin-left: 1rem;\n}\n", ""]);
+exports.push([module.i, "\n#buttons-block[data-v-b9c20fb8] {\n    margin-left: 1rem;\n}\n#loadingImage[data-v-b9c20fb8] {\n    position: absolute;\n    margin: 0 auto;\n    width: 100%;\n    top: 0;\n}\n", ""]);
 
 // exports
 
@@ -21672,6 +21687,18 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("img", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.isLoading,
+            expression: "isLoading"
+          }
+        ],
+        attrs: { id: "loadingImage", src: "/storage/preloader.gif", alt: "" }
+      }),
+      _vm._v(" "),
       _c("center", [_vm._v("Турнир " + _vm._s(_vm.tournamentName))]),
       _vm._v(" "),
       _c("first-division-info", {
@@ -21695,6 +21722,7 @@ var render = function() {
           "button",
           {
             staticClass: "btn btn-primary",
+            attrs: { disabled: _vm.isLoading },
             on: { click: _vm.generateTournament }
           },
           [
@@ -21709,6 +21737,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-danger",
+                  attrs: { disabled: _vm.isLoading },
                   on: { click: _vm.generatePlayOffResults }
                 },
                 [

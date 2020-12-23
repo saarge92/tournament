@@ -1,5 +1,6 @@
 <template>
     <div>
+        <img id="loadingImage" v-show="isLoading" src="/storage/preloader.gif" alt="">
         <center>Турнир {{ tournamentName }}</center>
         <first-division-info :division-name="firstDivisionName"
                              :division-results="firstDivisionResults"
@@ -11,13 +12,14 @@
         ></second-division-info>
 
         <div id="buttons-block">
-            <button class="btn btn-primary" v-on:click="generateTournament">
+            <button :disabled="isLoading" class="btn btn-primary" v-on:click="generateTournament">
                 <i class="fas fa-plus"></i>
                 Генерация турнира
             </button>
 
             <div style="margin-top:1rem">
-                <button v-if="this.tournamentId!=null" class="btn btn-danger" v-on:click="generatePlayOffResults">
+                <button :disabled="isLoading" v-if="this.tournamentId!=null" class="btn btn-danger"
+                        v-on:click="generatePlayOffResults">
                     <i class="fas fa-check"></i>
                     Генерация Плей-офф
                 </button>
@@ -51,6 +53,7 @@ export default {
             secondDivisionTeams: [],
             secondDivisionResults: [],
             playOffResults: null,
+            isLoading: false
         }
     },
     async mounted() {
@@ -58,13 +61,23 @@ export default {
     },
     methods: {
         async generateTournament() {
+            this.isLoading = true
             const generatedTournamentData = await generateTournamentsData()
             console.log(generatedTournamentData)
-            await this.fillDataAboutQualification(generatedTournamentData)
+            await this.fillDataAboutQualification(generatedTournamentData).catch(error => {
+                this.loading = false;
+                alert(error)
+            })
+            this.isLoading = false
         },
         async generatePlayOffResults() {
-            this.playOffResults = await generatePlayOff(this.tournamentId)
+            this.isLoading = true;
+            this.playOffResults = await generatePlayOff(this.tournamentId).catch(error => {
+                this.isLoading = false
+                alert(error)
+            })
             console.log(this.playOffResults)
+            this.isLoading = false;
         },
         async fillDataAboutQualification(tournamentResults) {
             this.tables = tournamentResults.tables
@@ -91,5 +104,12 @@ export default {
 <style scoped>
 #buttons-block {
     margin-left: 1rem;
+}
+
+#loadingImage {
+    position: absolute;
+    margin: 0 auto;
+    width: 100%;
+    top: 0;
 }
 </style>
