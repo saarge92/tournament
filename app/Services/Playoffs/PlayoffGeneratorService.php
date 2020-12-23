@@ -236,7 +236,7 @@ class PlayoffGeneratorService implements IPlayoffGeneratorService
         $semifinaleTeams = [];
         foreach ($gamePlans as $firstTeamPlace => $secondTeamPlace) {
             $teamHome = $teamsTopForQuarterFinaleFirstDivision[$firstTeamPlace];
-            $teamGuest = $teamsTopForQuarterFinaleSecondDivision[$firstTeamPlace];
+            $teamGuest = $teamsTopForQuarterFinaleSecondDivision[$secondTeamPlace];
 
             $countGoalHome = rand(1, 10);
             $countGoalGuest = rand(1, 10);
