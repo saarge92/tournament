@@ -1,22 +1,7 @@
 <template>
     <div>
-        <!--Четверть финалы -->
-        <div class="quarter_final_block">
-            <h4 id="quarter_final_header">Четверть финал</h4>
-            <div class="quarter_final_full_info"
-                 v-for="quarterFinal in playoffResults.quarter_final[0]['result_matches']">
-                {{ quarterFinal.team_home.name }} - {{ quarterFinal.team_guest.name }}
-                <span style="text-decoration: underline">{{ quarterFinal.score }}</span>
-            </div>
 
-            <div style="margin-left:1rem">
-                <span style="text-decoration: underline">Победители : </span>
-                <span v-for="(quarterFinal,index) in playoffResults.quarter_final[0]['team_winners']">
-                {{ quarterFinal.name }} {{ index != 3 ? ',' : null }}
-            </span>
-            </div>
-        </div>
-
+        <quarter-final :playoffResults="playoffResults"></quarter-final>
         <!--Полуфиналы -->
         <div style="margin-top:1rem;">
             <h4 class="quarter_final_header">Полуфинал</h4>
@@ -33,21 +18,54 @@
             </div>
         </div>
 
+        <!--Матчи 3 место -->
+        <div style="margin-top:1rem;">
+            <h4 class="quarter_final_header">Матч за 3 место</h4>
+            <div style="margin-left: 2rem;">
+                {{ playoffResults.third_place_tournament[0].winner.name }} -
+                {{ playoffResults.third_place_tournament[0].looser.name }}
+                <span style="text-decoration: underline">{{ playoffResults.third_place_tournament[0].score }}</span>
+            </div>
+
+            <div style="margin-left:2rem">
+                <span style="text-decoration: underline">Победитель : {{
+                        playoffResults.third_place_tournament[0].winner.name
+                    }} </span>
+            </div>
+        </div>
+
+        <!-- Финал -->
+        <div style="margin-top:1rem;">
+            <h4 class="quarter_final_header">Финал!</h4>
+            <div style="margin-left: 2rem;">
+                {{ playoffResults.final_tournament[0].winner.name }} -
+                {{ playoffResults.final_tournament[0].looser.name }}
+                <span style="text-decoration: underline">{{ playoffResults.final_tournament[0].score }}</span>
+            </div>
+
+            <div style="margin-left:2rem">
+                <span style="text-decoration: underline">Победитель финала : {{
+                        playoffResults.final_tournament[0].winner.name
+                    }} </span>
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script>
+import QuarterFinalResult from "./QuarterFinalResult";
+
 export default {
     name: "PlayOffResult",
-    props: ["playoffResults"]
+    props: ["playoffResults"],
+    components: {
+        'quarter-final': QuarterFinalResult
+    }
 }
 </script>
 
 <style scoped>
-.quarter_final_block {
-    margin-top: 1rem;
-    margin-left: 1rem;
-}
 
 .quarter_final_header {
     margin-left: 1rem;
