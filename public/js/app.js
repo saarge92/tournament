@@ -21626,13 +21626,13 @@ var render = function() {
     _c("div", { staticStyle: { "margin-left": "2rem" } }, [
       _vm._v(
         "\n        " +
-          _vm._s(_vm.playoffResults.final_tournament[0].winner.name) +
+          _vm._s(this.playoffResults.final_tournament[0].winner.name) +
           " -\n        " +
-          _vm._s(_vm.playoffResults.final_tournament[0].looser.name) +
+          _vm._s(this.playoffResults.final_tournament[0].looser.name) +
           "\n        "
       ),
       _c("span", { staticStyle: { "text-decoration": "underline" } }, [
-        _vm._v(_vm._s(_vm.playoffResults.final_tournament[0].score))
+        _vm._v(_vm._s(this.playoffResults.final_tournament[0].score))
       ])
     ]),
     _vm._v(" "),
@@ -21640,7 +21640,7 @@ var render = function() {
       _c("span", { staticStyle: { "text-decoration": "underline" } }, [
         _vm._v(
           "Победитель финала : " +
-            _vm._s(_vm.playoffResults.final_tournament[0].winner.name) +
+            _vm._s(this.playoffResults.final_tournament[0].winner.name) +
             " "
         )
       ])
