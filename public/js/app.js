@@ -2406,7 +2406,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.quarter_final_block{\n    margin-left: 1rem;\n}\n.quarter_final_full_info{\n    margin-left: 1rem;\n}\n", ""]);
+exports.push([module.i, "\n.quarter_final_block {\n    margin-left: 1rem;\n}\n.quarter_final_full_info {\n    margin-left: 1rem;\n}\n", ""]);
 
 // exports
 
@@ -21641,13 +21641,13 @@ var render = function() {
     _c("div", { staticStyle: { "margin-left": "2rem" } }, [
       _vm._v(
         "\n        " +
-          _vm._s(this.playoffResults.final_tournament[0].winner.name) +
+          _vm._s(this.playoffResults.final_tournament.winner.name) +
           " -\n        " +
-          _vm._s(this.playoffResults.final_tournament[0].looser.name) +
+          _vm._s(this.playoffResults.final_tournament.looser.name) +
           "\n        "
       ),
       _c("span", { staticStyle: { "text-decoration": "underline" } }, [
-        _vm._v(_vm._s(this.playoffResults.final_tournament[0].score))
+        _vm._v(_vm._s(this.playoffResults.final_tournament.score))
       ])
     ]),
     _vm._v(" "),
@@ -21655,7 +21655,7 @@ var render = function() {
       _c("span", { staticStyle: { "text-decoration": "underline" } }, [
         _vm._v(
           "Победитель финала : " +
-            _vm._s(this.playoffResults.final_tournament[0].winner.name) +
+            _vm._s(this.playoffResults.final_tournament.winner.name) +
             " "
         )
       ])
@@ -21834,7 +21834,7 @@ var render = function() {
         _vm._v("Четверть финал")
       ]),
       _vm._v(" "),
-      _vm._l(this.playoffResults.quarter_final[0]["result_matches"], function(
+      _vm._l(this.playoffResults.quarter_final["result_matches"], function(
         quarterFinal
       ) {
         return _c("div", { staticClass: "quarter_final_full_info" }, [
@@ -21859,7 +21859,7 @@ var render = function() {
             _vm._v("Победители : ")
           ]),
           _vm._v(" "),
-          _vm._l(this.playoffResults.quarter_final[0]["team_winners"], function(
+          _vm._l(this.playoffResults.quarter_final["team_winners"], function(
             quarterFinal,
             index
           ) {
@@ -21908,7 +21908,7 @@ var render = function() {
     [
       _c("h4", { staticClass: "quarter_final_header" }, [_vm._v("Полуфинал")]),
       _vm._v(" "),
-      _vm._l(_vm.playoffResults.semifinal[0]["result_matches"], function(
+      _vm._l(_vm.playoffResults.semifinal["result_matches"], function(
         semifinal
       ) {
         return _c("div", { staticStyle: { "margin-left": "2rem" } }, [
@@ -21933,7 +21933,7 @@ var render = function() {
             _vm._v("Победители : ")
           ]),
           _vm._v(" "),
-          _vm._l(_vm.playoffResults.semifinal[0]["team_winners"], function(
+          _vm._l(_vm.playoffResults.semifinal["team_winners"], function(
             semifinal,
             index
           ) {
@@ -21984,13 +21984,13 @@ var render = function() {
     _c("div", { staticStyle: { "margin-left": "2rem" } }, [
       _vm._v(
         "\n        " +
-          _vm._s(_vm.playoffResults.third_place_tournament[0].winner.name) +
+          _vm._s(_vm.playoffResults.third_place_tournament.winner.name) +
           " -\n        " +
-          _vm._s(_vm.playoffResults.third_place_tournament[0].looser.name) +
+          _vm._s(_vm.playoffResults.third_place_tournament.looser.name) +
           "\n        "
       ),
       _c("span", { staticStyle: { "text-decoration": "underline" } }, [
-        _vm._v(_vm._s(_vm.playoffResults.third_place_tournament[0].score))
+        _vm._v(_vm._s(_vm.playoffResults.third_place_tournament.score))
       ])
     ]),
     _vm._v(" "),
@@ -21998,7 +21998,7 @@ var render = function() {
       _c("span", { staticStyle: { "text-decoration": "underline" } }, [
         _vm._v(
           "Победитель : " +
-            _vm._s(_vm.playoffResults.third_place_tournament[0].winner.name) +
+            _vm._s(_vm.playoffResults.third_place_tournament.winner.name) +
             " "
         )
       ])

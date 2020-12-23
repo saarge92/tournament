@@ -148,7 +148,7 @@ class PlayOffService implements IPlayOffService
     {
         foreach ($finalResults as $finalResult) {
             if ($finalResult->count_goal_team_home > $finalResult->count_goal_team_guest) {
-                $response[$keyNameTournament][] = [
+                $response[$keyNameTournament] = [
                     'winner' => [
                         'id' => $finalResult->id_team_home,
                         'name' => $finalResult->team_home_name,
@@ -162,7 +162,7 @@ class PlayOffService implements IPlayOffService
                     'score' => $finalResult->count_goal_team_home . ":" . $finalResult->count_goal_team_guest
                 ];
             } else if ($finalResult->count_goal_team_home < $finalResult->count_goal_team_guest) {
-                $response[$keyNameTournament][] = [
+                $response[$keyNameTournament] = [
                     'winner' => [
                         'id' => $finalResult->id_team_guest,
                         'name' => $finalResult->team_guest_name,
