@@ -3,51 +3,25 @@
 
         <quarter-final :playoffResults="playoffResults"></quarter-final>
         <semifinal :playoffResults="playoffResults"></semifinal>
-        <!--Матчи 3 место -->
-        <div style="margin-top:1rem;">
-            <h4 class="quarter_final_header">Матч за 3 место</h4>
-            <div style="margin-left: 2rem;">
-                {{ playoffResults.third_place_tournament[0].winner.name }} -
-                {{ playoffResults.third_place_tournament[0].looser.name }}
-                <span style="text-decoration: underline">{{ playoffResults.third_place_tournament[0].score }}</span>
-            </div>
-
-            <div style="margin-left:2rem">
-                <span style="text-decoration: underline">Победитель : {{
-                        playoffResults.third_place_tournament[0].winner.name
-                    }} </span>
-            </div>
-        </div>
-
-        <!-- Финал -->
-        <div style="margin-top:1rem;">
-            <h4 class="quarter_final_header">Финал!</h4>
-            <div style="margin-left: 2rem;">
-                {{ playoffResults.final_tournament[0].winner.name }} -
-                {{ playoffResults.final_tournament[0].looser.name }}
-                <span style="text-decoration: underline">{{ playoffResults.final_tournament[0].score }}</span>
-            </div>
-
-            <div style="margin-left:2rem">
-                <span style="text-decoration: underline">Победитель финала : {{
-                        playoffResults.final_tournament[0].winner.name
-                    }} </span>
-            </div>
-        </div>
-
+        <third-pace-final :playoffResults="playoffResults"></third-pace-final>
+        <final :playoffResults="playoffResults"></final>
     </div>
 </template>
 
 <script>
 import QuarterFinalResult from "./QuarterFinalResult";
 import SemifinalResult from "./SemifinalResult";
+import ThirdPlaceResult from "./ThirdPlaceResult";
+import FinalResult from "./FinalResult";
 
 export default {
     name: "PlayOffResult",
     props: ["playoffResults"],
     components: {
         'quarter-final': QuarterFinalResult,
-        'semifinal': SemifinalResult
+        'semifinal': SemifinalResult,
+        'third-pace-final': ThirdPlaceResult,
+        'final': FinalResult
     }
 }
 </script>
