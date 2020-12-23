@@ -2174,6 +2174,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PlayOffResult",
   props: ["playoffResults"]
@@ -2231,7 +2249,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#quarter_final_block[data-v-f4e25d86] {\n    margin-top: 1rem;\n    margin-left: 1rem;\n}\n#quarter_final_header[data-v-f4e25d86] {\n    margin-left: 1rem;\n    text-decoration: underline;\n}\n#quarter_final_full_info[data-v-f4e25d86] {\n    margin-left: 1rem;\n}\n", ""]);
+exports.push([module.i, "\n.quarter_final_block[data-v-f4e25d86] {\n    margin-top: 1rem;\n    margin-left: 1rem;\n}\n.quarter_final_header[data-v-f4e25d86] {\n    margin-left: 1rem;\n    text-decoration: underline;\n}\n.quarter_final_full_info[data-v-f4e25d86] {\n    margin-left: 1rem;\n}\n", ""]);
 
 // exports
 
@@ -21525,7 +21543,7 @@ var render = function() {
   return _c("div", [
     _c(
       "div",
-      { attrs: { id: "quarter_final_block" } },
+      { staticClass: "quarter_final_block" },
       [
         _c("h4", { attrs: { id: "quarter_final_header" } }, [
           _vm._v("Четверть финал")
@@ -21534,7 +21552,7 @@ var render = function() {
         _vm._l(_vm.playoffResults.quarter_final[0]["result_matches"], function(
           quarterFinal
         ) {
-          return _c("div", { attrs: { id: "quarter_final_full_info" } }, [
+          return _c("div", { staticClass: "quarter_final_full_info" }, [
             _vm._v(
               "\n            " +
                 _vm._s(quarterFinal.team_home.name) +
@@ -21570,6 +21588,60 @@ var render = function() {
                 ])
               }
             )
+          ],
+          2
+        )
+      ],
+      2
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticStyle: { "margin-top": "1rem" } },
+      [
+        _c("h4", { staticClass: "quarter_final_header" }, [
+          _vm._v("Полуфинал")
+        ]),
+        _vm._v(" "),
+        _vm._l(_vm.playoffResults.semifinal[0]["result_matches"], function(
+          semifinal
+        ) {
+          return _c("div", { staticStyle: { "margin-left": "2rem" } }, [
+            _vm._v(
+              "\n            " +
+                _vm._s(semifinal.team_home.name) +
+                " - " +
+                _vm._s(semifinal.team_guest.name) +
+                "\n            "
+            ),
+            _c("span", { staticStyle: { "text-decoration": "underline" } }, [
+              _vm._v(_vm._s(semifinal.score))
+            ])
+          ])
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticStyle: { "margin-left": "2rem" } },
+          [
+            _c("span", { staticStyle: { "text-decoration": "underline" } }, [
+              _vm._v("Победители : ")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.playoffResults.semifinal[0]["team_winners"], function(
+              semifinal,
+              index
+            ) {
+              return _c("span", [
+                _vm._v(
+                  "\n            " +
+                    _vm._s(semifinal.name) +
+                    " " +
+                    _vm._s(index != 1 ? "," : null) +
+                    "\n        "
+                )
+              ])
+            })
           ],
           2
         )
