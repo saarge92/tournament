@@ -9,16 +9,34 @@
                               :division-results="secondDivisionResults"
                               :division-teams="secondDivisionTeams"
         ></second-division-info>
-        <button class="btn btn-primary" v-on:click="generateTournament">
-            <i class="fas fa-plus"></i>
-            Генерация турнира
-        </button>
+
+        <div id="buttons-block">
+            <button class="btn btn-primary" v-on:click="generateTournament">
+                <i class="fas fa-plus"></i>
+                Генерация турнира
+            </button>
+
+            <div style="margin-top:1rem">
+                <button v-if="this.tournamentId!=null" class="btn btn-danger" v-on:click="generatePlayOffResults">
+                    <i class="fas fa-check"></i>
+                    Генерация Плей-офф
+                </button>
+            </div>
+
+            <div v-if="this.playOffResults!=null">
+                <center style="color:red"><h2>Результаты плей-офф</h2></center>
+                <playoff-info :playoffResults="playOffResults"></playoff-info>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import {generateTournamentsData, getTeamsByDivision} from '../services/qualification_service'
+import {generatePlayOff} from "../services/playoff_service"
+
 import DivisionResult from "./DivisionResult";
+import PlayOffResult from "./PlayOffResult";
 
 export default {
     data() {
@@ -31,7 +49,8 @@ export default {
             firstDivisionResults: [],
             firstDivisionTeams: [],
             secondDivisionTeams: [],
-            secondDivisionResults: []
+            secondDivisionResults: [],
+            playOffResults: null,
         }
     },
     async mounted() {
@@ -42,6 +61,10 @@ export default {
             const generatedTournamentData = await generateTournamentsData()
             console.log(generatedTournamentData)
             await this.fillDataAboutQualification(generatedTournamentData)
+        },
+        async generatePlayOffResults() {
+            this.playOffResults = await generatePlayOff(this.tournamentId)
+            console.log(this.playOffResults)
         },
         async fillDataAboutQualification(tournamentResults) {
             this.tables = tournamentResults.tables
@@ -59,7 +82,14 @@ export default {
     },
     components: {
         'first-division-info': DivisionResult,
-        'second-division-info': DivisionResult
+        'second-division-info': DivisionResult,
+        'playoff-info': PlayOffResult
     }
 }
 </script>
+
+<style scoped>
+#buttons-block {
+    margin-left: 1rem;
+}
+</style>

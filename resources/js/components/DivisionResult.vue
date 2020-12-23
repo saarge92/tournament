@@ -8,7 +8,7 @@
                 <th v-for="firstTeamDivision in divisionTeams">
                     {{ firstTeamDivision.name }}
                 </th>
-                <th>Score</th>
+                <th v-if="this.divisionResults.length > 0">Score</th>
             </tr>
             </thead>
             <tbody>
