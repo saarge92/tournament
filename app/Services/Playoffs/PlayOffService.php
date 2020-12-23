@@ -135,7 +135,7 @@ class PlayOffService implements IPlayOffService
                 ];
             }
         }
-        $response['semifinal'][] = $resultMatchesRow;
+        $response['semifinal'] = $resultMatchesRow;
     }
 
     /**
@@ -217,6 +217,6 @@ class PlayOffService implements IPlayOffService
                 ];
             }
         }
-        $response['quarter_final'][] = $resultMatchesRow;
+        $response['quarter_final'] = $resultMatchesRow;
     }
 }
