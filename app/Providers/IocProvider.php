@@ -36,6 +36,7 @@ use Illuminate\Support\ServiceProvider;
  */
 class IocProvider extends ServiceProvider
 {
+    protected $defer = false;
     /**
      * Register services.
      *
