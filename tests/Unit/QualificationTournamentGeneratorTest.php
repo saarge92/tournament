@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Interfaces\Matches\IMatchService;
 use App\Interfaces\Tournaments\IQualificationGeneratorService;
 use App\Interfaces\Tournaments\IQualificationTournamentService;
 use App\Providers\IocProvider;
