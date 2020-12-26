@@ -8,7 +8,7 @@ use App\Interfaces\Tournaments\IQualificationGeneratorService;
 use App\Interfaces\Tournaments\IQualificationTournamentService;
 use App\Interfaces\Tournaments\ITournamentResultService;
 use App\Models\Division;
-use App\Models\Match;
+use App\Models\TournamentMatch;
 use App\Models\Team;
 use App\Models\Tournament;
 use App\Repositories\Implementations\TournamentRepository;
@@ -139,12 +139,12 @@ class QualificationGeneratorService implements IQualificationGeneratorService
 
     /**
      * Инициируем данные результатов матчей на турнире во время генерации турнирной таблицы
-     * @param Match $match Матч, который проходил
+     * @param TournamentMatch $match Матч, который проходил
      * @param Team $teamGuest Команда гостей
      * @param Team $teamHome Команда хозяев
      * @param int $tournamentId Id турнира, для которого обновляем результат
      */
-    private function updateTeamResult(Match $match, Team $teamGuest, Team $teamHome, int $tournamentId)
+    private function updateTeamResult(TournamentMatch $match, Team $teamGuest, Team $teamHome, int $tournamentId)
     {
         if ($match->count_goal_team_home == $match->count_goal_team_guest) {
             $this->tournamentResultService->updateTeamResult($teamGuest->id, $tournamentId, 1);

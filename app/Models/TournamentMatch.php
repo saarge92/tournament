@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Match extends Model
+class TournamentMatch extends Model
 {
+    protected $table = 'matches';
+
     use SoftDeletes;
 
     protected $fillable = [

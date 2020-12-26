@@ -3,7 +3,7 @@
 
 namespace App\Interfaces\Matches;
 
-use App\Models\Match;
+use App\Models\TournamentMatch;
 
 /**
  * Интерфейс по работе с бизнес-логикой
@@ -14,7 +14,7 @@ use App\Models\Match;
  */
 interface IMatchService
 {
-    function addMatchInfo(array $data): Match;
+    function addMatchInfo(array $data): TournamentMatch;
 
     function getMatchInfoOnTournamentStage(int $idHomeTeam, int $idTeamGuest, int $tournamentId, int $idStage);
 

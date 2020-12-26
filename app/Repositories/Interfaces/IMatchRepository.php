@@ -4,19 +4,19 @@
 namespace App\Repositories\Interfaces;
 
 
-use App\Models\Match;
+use App\Models\TournamentMatch;
 
 /**
  * Интерфейс, определяющий функционал репозитория
- * для сущности матчей комманд (сущность Match)
+ * для сущности матчей комманд (сущность TournamentMatch)
  *
  * @package App\Repositories\Interfaces
  */
 interface IMatchRepository
 {
-    function createMatch(array $data): Match;
+    function createMatch(array $data): TournamentMatch;
 
-    function getMatch(int $id): ?Match;
+    function getMatch(int $id): ?TournamentMatch;
 
     function getMatchByTeamTournamentStage(int $teamHome, int $teamGuest, int $idTournament, int $idStage);
 

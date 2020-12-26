@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use App\Interfaces\Matches\IMatchService;
 use App\Models\Division;
-use App\Models\Match;
+use App\Models\TournamentMatch;
 use App\Models\Stage;
 use App\Models\Team;
 use App\Models\Tournament;
@@ -56,7 +56,7 @@ class MatchServiceTest extends TestCase
 
         $response = $matchService->addMatchInfo($data);
         $matchRepositoryMock->shouldReceive('createMatch')->with($data);
-        $this->assertInstanceOf(Match::class, $response);
+        $this->assertInstanceOf(TournamentMatch::class, $response);
 
     }
 

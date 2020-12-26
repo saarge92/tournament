@@ -4,7 +4,7 @@
 namespace App\Repositories\Implementations;
 
 
-use App\Models\Match;
+use App\Models\TournamentMatch;
 use App\Repositories\Interfaces\IMatchRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -17,21 +17,21 @@ class MatchRepository implements IMatchRepository
     /**
      * Создание матча в базе
      * @param array $data Данные инициализации матча
-     * @return Match Вернем созданный матч
+     * @return TournamentMatch Вернем созданный матч
      */
-    function createMatch(array $data): Match
+    function createMatch(array $data): TournamentMatch
     {
-        return Match::create($data);
+        return TournamentMatch::create($data);
     }
 
     /**
      * Получение матча по id
      * @param int $id Id матча
-     * @return Match|null Вернем найденный матч
+     * @return TournamentMatch|null Вернем найденный матч
      */
-    function getMatch(int $id): ?Match
+    function getMatch(int $id): ?TournamentMatch
     {
-        return Match::find($id);
+        return TournamentMatch::find($id);
     }
 
     /**
@@ -40,11 +40,11 @@ class MatchRepository implements IMatchRepository
      * @param int $teamGuest Id команды гостей
      * @param int $idTournament Id турнира
      * @param int $idStage Id этапа турнира
-     * @return Match|null Вернем информацию о матче или пустую запись
+     * @return TournamentMatch|null Вернем информацию о матче или пустую запись
      */
-    function getMatchByTeamTournamentStage(int $teamHome, int $teamGuest, int $idTournament, int $idStage): ?Match
+    function getMatchByTeamTournamentStage(int $teamHome, int $teamGuest, int $idTournament, int $idStage): ?TournamentMatch
     {
-        return Match::where([
+        return TournamentMatch::where([
             'id_team_home' => $teamHome,
             'id_team_guest' => $teamGuest,
             'id_tournament' => $idTournament,
@@ -61,13 +61,13 @@ class MatchRepository implements IMatchRepository
      */
     function getMatchesByTeamIdAndTournament(int $idTeam, int $tournamentId, int $stageId)
     {
-        return Match::whereRaw("(id_team_home = ? OR id_team_guest = ?) AND (id_tournament = ? and id_stage =?)",
+        return TournamentMatch::whereRaw("(id_team_home = ? OR id_team_guest = ?) AND (id_tournament = ? and id_stage =?)",
             [$idTeam, $idTeam, $tournamentId, $stageId])->orderBy('id', 'ASC')->get();
     }
 
     function getMatchesByTournamentAndStage(int $tournamentId, int $stageId)
     {
-        return Match::whereRaw("id_tournament = ? and id_stage =?",
+        return TournamentMatch::whereRaw("id_tournament = ? and id_stage =?",
             [$tournamentId, $stageId])->orderBy('id', 'ASC')->get();
     }
 

@@ -6,7 +6,7 @@ namespace App\Services\Matches;
 
 use App\Interfaces\Matches\IMatchService;
 use App\Models\Division;
-use App\Models\Match;
+use App\Models\TournamentMatch;
 use App\Models\Stage;
 use App\Models\Team;
 use App\Models\Tournament;
@@ -33,9 +33,9 @@ class MatchService implements IMatchService
      * Создаем матч в нашей системе
      *
      * @param array $data Данные для создания матча
-     * @return Match Вернем созданный матч
+     * @return TournamentMatch Вернем созданный матч
      */
-    public function addMatchInfo(array $data): Match
+    public function addMatchInfo(array $data): TournamentMatch
     {
         $division = Division::find($data['id_division']);
         if (!$division)
