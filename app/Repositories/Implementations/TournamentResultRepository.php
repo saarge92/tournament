@@ -7,6 +7,7 @@ namespace App\Repositories\Implementations;
 use App\Models\Division;
 use App\Models\TournamentResult;
 use App\Repositories\Interfaces\ITournamentResultRepository;
+use Cassandra\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -65,7 +66,7 @@ class TournamentResultRepository implements ITournamentResultRepository
      * @param int $tournamentId Id турнира
      * @return \Illuminate\Support\Collection
      */
-    function getTournamentResultByTournamentIdGroupedByDivision(int $tournamentId)
+    function getTournamentResultByTournamentIdGroupedByDivision(int $tournamentId): Collection
     {
         return DB::table('divisions as d')
             ->join('teams as t', DB::raw('t.id_division'), '=', DB::raw('d.id'))

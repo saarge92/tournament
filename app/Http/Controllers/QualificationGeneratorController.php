@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 
 use App\Interfaces\Tournaments\IQualificationGeneratorService;
-use App\Interfaces\Tournaments\IQualificationTournamentService;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -30,7 +29,7 @@ class QualificationGeneratorController extends Controller
      *
      * @return JsonResponse Json ответ с турнирной таблицей
      */
-    public function generateQualificationGames()
+    public function generateQualificationGames(): Jsonresponse
     {
         $data = $this->qualificationGeneratorService->generateQualificationGames();
         return response()->json($data, JsonResponse::HTTP_OK);

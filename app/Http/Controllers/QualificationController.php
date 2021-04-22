@@ -20,7 +20,7 @@ class QualificationController extends Controller
      * @param int $id Id турнира
      * @return JsonResponse
      */
-    public function getQualificationByTournamentId(int $id)
+    public function getQualificationByTournamentId(int $id): JsonResponse
     {
         $qualificationData = $this->qualificationTournamentService->getQualificationTournamentResult($id);
         return response()->json($qualificationData, JsonResponse::HTTP_OK);
